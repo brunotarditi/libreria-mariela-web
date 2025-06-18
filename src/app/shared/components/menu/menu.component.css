@@ -1,0 +1,129 @@
+.menu-items {
+  margin-top: 40px;
+  height: calc(100% - 90px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-items li {
+  list-style: none;
+}
+
+.menu-items li a {
+  display: flex;
+  height: 60px;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+}
+
+.nav-links li a:hover:before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background-color: var(--navlink-color);
+}
+
+.menu-items li a mat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  min-width: 45px;
+  height: 100%;
+  color: var(--dark-light-color);
+}
+
+.menu-items li a .link-name {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--dark-light-color);
+  transition: var(--tran-03);
+}
+
+ul.closed li a .link-name {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-links li a:hover mat-icon,
+.nav-links li a:hover .link-name {
+  color: var(--navlink-color);
+}
+
+.menu-items .logout-mode {
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+
+}
+
+.menu-items .mode {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.menu-items .mode-toggle {
+  position: absolute;
+  right: 14px;
+  height: 50px;
+  min-width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mode-toggle .switch {
+  position: relative;
+  display: inline-block;
+  height: 22px;
+  width: 40px;
+  border-radius: 25px;
+  background-color: var(--toggle-color);
+
+}
+
+.switch:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--toggle-position);
+  transform: translateY(-50%);
+  height: 15px;
+  width: 15px;
+  background-color: var(--panel-color);
+  border-radius: 50%;
+  transition: var(--tran-03);
+}
+
+@media (max-width: 1000px) {
+
+  li a .link-name {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  ul.closed li a .link-name {
+  opacity: 0;
+  pointer-events: none;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  li a .link-name {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  ul.closed li a .link-name {
+  opacity: 0;
+  pointer-events: none;
+  }
+}

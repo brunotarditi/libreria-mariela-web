@@ -1,0 +1,132 @@
+/*HEADER*/
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header {
+  position: fixed;
+  height: 80px;
+  width: 100%;
+  z-index: 100;
+  padding: 0 20px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.nav_logo,
+.button {
+  color: #FFF;
+}
+
+.nav_logo {
+  font-size: 25px;
+}
+
+/*BACKGROUND*/
+.background {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background-color: #576CBC;
+}
+
+.background::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--tran-05);
+}
+
+
+/* FORM CONTAINER */
+.form_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 350px;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  background-color: #FFF;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease-out ;
+}
+
+.background .form_container {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.form_container mat-card-title {
+  font-size: 22px;
+  margin: 10px auto;
+  color: #202020;
+  text-align: center;
+}
+
+.form_container .btn-login {
+  background-color: #576CBC;
+  margin-top: 30px;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 6px;
+}
+
+.login-card {
+  max-width: 600px;
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #FFF;
+  box-shadow: none;
+}
+
+.btn-login:disabled {
+  color: #dfdfdf;
+  opacity: 0.8;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.login_signup {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.option_field {
+  display: flex;
+  margin-top: 14px;
+  justify-content: flex-end;
+}
+
+.link {
+  color: #576CBC;
+  font-size: 12px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+

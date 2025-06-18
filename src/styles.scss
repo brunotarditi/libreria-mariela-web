@@ -1,0 +1,119 @@
+@use '@angular/material' as mat;
+
+/* === BASE STYLES === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+@include mat.form-field-overrides((
+  container-text-size: 12px,
+  filled-caret-color: #576CBC,
+  filled-label-text-size: 13px,
+  filled-focus-active-indicator-color: #576CBC,
+  filled-focus-label-text-color: #576CBC,
+  filled-input-text-color: #576CBC,
+  filled-label-text-color: rgba(0, 0, 0, 0.6),
+  filled-container-color: #FFF,
+));
+
+@include mat.table-overrides((
+    background-color: #FFF,
+));
+
+@include mat.paginator-overrides((
+    container-background-color: #FFF,
+));
+
+:root {
+  /* === COLORS === */
+  --primary-color: #576CBC;
+  --navlink-color: #576CBC;
+  --panel-color: #FFF;
+  --text-color: #202020;
+  --dark-light-color: #202020;
+  --border-color: #e6e5e5;
+  --toggle-color: #DDD;
+  --toggle-position: 5px;
+  --title-icon-color: #FFF;
+
+  --box1-color: #C0DBEA;
+  --box2-color: #C7E9B0;
+  --box3-color: #FDF7C3;
+
+  --tran-05: all 0.5s ease;
+  --tran-03: all 0.3s ease;
+  --tran-02: all 0.2s ease;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--panel-color);
+}
+
+/* === DARK MODE === */
+body.dark {
+  --primary-color: #2c3032;
+  --navlink-color: #DDD;
+  --panel-color: #202020;
+  --text-color: #FFF;
+  --dark-light-color: #FFF;
+  --border-color: #4D4C4C;
+  --toggle-color: #FFF;
+  --toggle-position: 20px;
+  --title-icon-color: #FFF;
+
+  --box1-color: #2c3032;
+  --box2-color: #2c3032;
+  --box3-color: #2c3032;
+
+  .background {
+    background-color: #202020;
+  }
+
+  .form_container {
+    background-color: #202020;
+  }
+
+  .login-card {
+    background-color: #202020;
+  }
+
+  .link {
+    color: #FFF;
+  }
+
+  .login_signup {
+    color: #FFF;
+  }
+
+  .option_field a {
+    color: #FFF;
+  }
+
+  .form_container .login-card mat-card-title {
+    color: #FFF;
+  }
+
+  @include mat.table-overrides((
+    background-color: #202020,
+    row-item-label-text-color: #FFF,
+    row-item-outline-color: #FFF,
+    header-headline-color: #FFF,
+  ));
+
+  @include mat.paginator-overrides((
+    container-background-color: #202020,
+    container-text-color: #FFF,
+  ));
+
+  @include mat.form-field-overrides((
+    filled-container-color: #202020,
+    filled-label-text-color: #FFF,
+    filled-focus-active-indicator-color: #FFF,
+  ));
+
+
+}

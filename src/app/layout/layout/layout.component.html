@@ -1,0 +1,12 @@
+<!-- Sidebar -->
+<app-sidebar [isOpen]="isOpen" [status]="status" [ngClass]="status"></app-sidebar>
+
+<!-- Dashboard -->
+<section class="dashboard" [ngClass]="{'sidebar-closed': !isOpen}">
+  <!-- header -->
+  <app-header (toggleSidebar)="toggle($event)"></app-header>
+  <!-- content -->
+  <div class="dash-content">
+    <router-outlet></router-outlet>
+  </div>
+</section>

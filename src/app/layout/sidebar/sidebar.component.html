@@ -1,0 +1,20 @@
+<nav [ngClass]="status">
+  <div class="logo-name">
+    <div class="logo-image">
+      <img [src]="'assets/img/logo.png'" alt="logo">
+    </div>
+
+    <span class="brand-name">
+      Librería Mariela
+    </span>
+  </div>
+
+  <app-menu [listItems]="listItems"
+  (changeMode)="toggleTheme($event)"
+  [iconMode]="iconMode"
+  [textMode]="textMode"
+  [typeMode]="mode"
+  [isClosed]="status === 'close'">
+  </app-menu>
+
+</nav>

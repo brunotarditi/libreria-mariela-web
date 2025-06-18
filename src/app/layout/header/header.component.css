@@ -1,0 +1,31 @@
+.top {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+}
+
+.top .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top img {
+  width: 40px;
+  border-radius: 50%;
+}
+
+mat-icon {
+  color: var(--dark-light-color);
+}
+
+@media (max-width: 1000px) {
+  #btn-toggle{
+    display: none;
+  }
+}
+
+
+

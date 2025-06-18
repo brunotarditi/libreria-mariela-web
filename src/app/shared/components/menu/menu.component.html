@@ -1,0 +1,31 @@
+<div class="menu-items">
+  <ul class="nav-links" [class.closed]="isClosed()">
+    @for (item of listItems(); track item.name) {
+      <li>
+        <a [routerLink]="item.route">
+          <mat-icon>{{item.icon}}</mat-icon>
+          <span class="link-name">{{item.name}}</span>
+        </a>
+      </li>
+    }
+  </ul>
+
+  <ul class="logout-mode" [class.closed]="isClosed()">
+    <li>
+      <a routerLink="/auth" (click)="logOut()">
+        <mat-icon>home</mat-icon>
+        <span class="link-name" >Logout</span>
+      </a>
+    </li>
+    <li class="mode">
+      <a href="#">
+        <mat-icon>{{ iconMode() }}</mat-icon>
+        <span class="link-name">{{textMode()}}</span>
+      </a>
+
+      <div class="mode-toggle">
+        <span class="switch" (click)="toggleTheme()"></span>
+      </div>
+    </li>
+  </ul>
+</div>
