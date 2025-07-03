@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from '@core/services/auth.guard';
-import { RoleGuard } from '@core/services/role.guard';
-import { LayoutComponent } from '@layout/layout/layout.component';
+import { AuthGuard } from '@core/guards/auth.guard';
+import { RoleGuard } from '@core/guards/role.guard';
+import { LayoutComponent } from '@core/layout/layout/layout.component';
 
 export const routes: Routes = [
   {
@@ -11,21 +11,51 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./modules/home/home.component').then(c => c.HomeComponent),
+    loadComponent: () => import('./features/home/home.component').then(c => c.HomeComponent),
   },
   {
     path: '',
-    component: LayoutComponent,
+    loadComponent: () => import('./core/layout/layout/layout.component').then(c => LayoutComponent),
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./modules/dashboard/dashboard.component').then(c => c.DashboardComponent),
+        loadComponent: () => import('./features/dashboard/components/dashboard.component').then(c => c.DashboardComponent),
         canActivate: [AuthGuard, RoleGuard],
         data: { roles: ['ADMIN', 'WRITE'] }
       },
       {
         path: 'brands',
-        loadComponent: () => import('./modules/brand/components/brand.component').then(c => c.BrandComponent),
+        loadComponent: () => import('./features/brand/components/brand.component').then(c => c.BrandComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'categories',
+        loadComponent: () => import('./features/category/components/category.component').then(c => c.CategoryComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'products',
+        loadComponent: () => import('./features/product/components/list/products.component').then(c => c.ProductsComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'products/detail',
+        loadComponent: () => import('./features/product/components/detail/product.component').then(c => c.ProductComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'products/detail/:id',
+        loadComponent: () => import('./features/product/components/detail/product.component').then(c => c.ProductComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'suppliers',
+        loadComponent: () => import('./features/supplier/components/supplier.component').then(c => c.SupplierComponent),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'customers',
+        loadComponent: () => import('./features/customer/components/customer.component').then(c => c.CustomerComponent),
         canActivate: [AuthGuard],
       },
     ]

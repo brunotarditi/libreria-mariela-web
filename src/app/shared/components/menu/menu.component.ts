@@ -2,7 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { ListItem } from '@shared/interfaces/list_item';
+import { ListItem } from '@shared/models/list_item';
 
 
 @Component({

@@ -10,7 +10,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '@core/services/auth.service';
 import { Login } from '@core/models/login';
-import { StorageService } from '@shared/services/storage.service';
 import { ACCESS_TOKEN, INFO } from '@core/constants/constants';
 
 @Component({
@@ -34,7 +33,6 @@ export class AuthComponent {
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
-  private storageService = inject(StorageService);
 
   passwordVisibility: Record<string, WritableSignal<boolean>> = {
   login: signal(true),

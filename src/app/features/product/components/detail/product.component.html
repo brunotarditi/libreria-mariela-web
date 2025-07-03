@@ -1,0 +1,17 @@
+<p>¡Este es el componente de detalle del producto! {{productId}}</p>
+<section>
+  <div class="example-button-row">
+    <button mat-flat-button (click)="exportExcel()">Exportar modelo</button>
+        <input type="file" (change)="onFileSelected($event)" accept=".xlsx">
+        <button mat-raised-button color="primary" (click)="onImportExcel()"  [disabled]="!selectedFile">
+            <mat-icon>attach_file</mat-icon> Importar excel
+        </button>
+        @if(selectedFile){
+          <span>{{ selectedFile.name }}</span>
+        }
+
+        @if(message){
+          <span>{{ message }}</span>
+        }
+  </div>
+</section>

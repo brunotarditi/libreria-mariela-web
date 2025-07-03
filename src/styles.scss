@@ -8,6 +8,35 @@
   font-family: 'Poppins', sans-serif;
 }
 
+:root {
+  /* === COLORS === */
+  --primary-color: #576CBC;
+  --navlink-color: #576CBC;
+  --panel-color: #FFF;
+  --text-color: #242626;
+  --dark-light-color: #242626;
+  --border-color: #e6e5e5;
+  --toggle-color: #DDD;
+  --toggle-position: 5px;
+  --title-icon-color: #FFF;
+
+  --box1-color: #C0DBEA;
+  --box2-color: #C7E9B0;
+  --box3-color: #FDF7C3;
+
+  --tran-05: all 0.5s ease;
+  --tran-03: all 0.3s ease;
+  --tran-02: all 0.2s ease;
+}
+
+@include mat.button-overrides((
+    filled-container-color: #576CBC,
+));
+
+@include mat.expansion-overrides((
+    container-background-color: #FFF,
+));
+
 @include mat.form-field-overrides((
   container-text-size: 12px,
   filled-caret-color: #576CBC,
@@ -27,26 +56,22 @@
     container-background-color: #FFF,
 ));
 
-:root {
-  /* === COLORS === */
-  --primary-color: #576CBC;
-  --navlink-color: #576CBC;
-  --panel-color: #FFF;
-  --text-color: #202020;
-  --dark-light-color: #202020;
-  --border-color: #e6e5e5;
-  --toggle-color: #DDD;
-  --toggle-position: 5px;
-  --title-icon-color: #FFF;
-
-  --box1-color: #C0DBEA;
-  --box2-color: #C7E9B0;
-  --box3-color: #FDF7C3;
-
-  --tran-05: all 0.5s ease;
-  --tran-03: all 0.3s ease;
-  --tran-02: all 0.2s ease;
+.success-snackbar {
+  @include mat.snack-bar-overrides((
+    container-color: #229b26, // Verde para éxito
+    supporting-text-color: white,
+    button-color: white
+  ));
 }
+
+.error-snackbar {
+  @include mat.snack-bar-overrides((
+    container-color: #ee1a0b, // Rojo para error
+    supporting-text-color: white,
+    button-color: white
+  ));
+}
+
 
 body {
   min-height: 100vh;
@@ -55,9 +80,9 @@ body {
 
 /* === DARK MODE === */
 body.dark {
-  --primary-color: #2c3032;
+  --primary-color: #1d1f1f;
   --navlink-color: #DDD;
-  --panel-color: #202020;
+  --panel-color: #242626;
   --text-color: #FFF;
   --dark-light-color: #FFF;
   --border-color: #4D4C4C;
@@ -65,20 +90,20 @@ body.dark {
   --toggle-position: 20px;
   --title-icon-color: #FFF;
 
-  --box1-color: #2c3032;
-  --box2-color: #2c3032;
-  --box3-color: #2c3032;
+  --box1-color: #2c2d2d;
+  --box2-color: #2c2d2d;
+  --box3-color: #2c2d2d;
 
   .background {
-    background-color: #202020;
+    background-color: #242626;
   }
 
   .form_container {
-    background-color: #202020;
+    background-color: #242626;
   }
 
   .login-card {
-    background-color: #202020;
+    background-color: #242626;
   }
 
   .link {
@@ -97,23 +122,36 @@ body.dark {
     color: #FFF;
   }
 
+  .card{
+    background-color: #242626;
+  }
+
+  .subtitle {
+  color: #dedede;
+}
+
   @include mat.table-overrides((
-    background-color: #202020,
+    background-color: #242626,
     row-item-label-text-color: #FFF,
     row-item-outline-color: #FFF,
     header-headline-color: #FFF,
   ));
 
   @include mat.paginator-overrides((
-    container-background-color: #202020,
+    container-background-color: #242626,
     container-text-color: #FFF,
   ));
 
   @include mat.form-field-overrides((
-    filled-container-color: #202020,
+    filled-container-color: #242626,
     filled-label-text-color: #FFF,
     filled-focus-active-indicator-color: #FFF,
   ));
 
+  @include mat.expansion-overrides((
+      container-background-color: #242626,
+      header-text-color: #FFF,
+      header-description-color: #FFF
+  ));
 
 }

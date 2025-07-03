@@ -1,0 +1,51 @@
+  <app-title [title]="'Dashboard'" [icon]="'dashboard'"></app-title>
+
+  <div class="boxes">
+    <div class="box bg-primary">
+      <mat-icon>sell</mat-icon>
+      <span class="text">Productos totales</span>
+      <span class="number">{{dashboard()?.total_products}}</span>
+    </div>
+    <div class="box bg-secondary">
+      <mat-icon>local_shipping</mat-icon>
+      <span class="text">Proveedores totales</span>
+      <span class="number">{{dashboard()?.total_suppliers}}</span>
+    </div>
+    <div class="box bg-warn">
+      <mat-icon>person</mat-icon>
+      <span class="text">Clientes totales</span>
+      <span class="number">{{dashboard()?.total_clients}}</span>
+    </div>
+  </div>
+
+<div class="activity">
+  <app-title [title]="'Actividades recientes'" [icon]="'schedule'"></app-title>
+  <div class="activity-data">
+    <div class="data">
+      <span class="data-title">Usuario</span>
+    </div>
+    <div class="data">
+      <span class="data-title">Fecha</span>
+    </div>
+    <div class="data">
+      <span class="data-title">Tipo de actividad</span>
+    </div>
+    <div class="data">
+      <span class="data-title">Acción</span>
+    </div>
+      @for (activity of dashboard()?.recent_activities; track $index) {
+      <div class="data">
+        <span class="data-list">{{ activity.user_name }}</span>
+      </div>
+      <div class="data">
+        <span class="data-list">{{ activity.request_at | date:'dd/MM/yyyy - HH:mm':'es-ES' }}</span>
+      </div>
+      <div class="data">
+        <span class="data-list">{{ activity.entity }}</span>
+      </div>
+      <div class="data">
+        <span class="data-list">{{ activity.action }}</span>
+      </div>
+    }
+  </div>
+</div>
