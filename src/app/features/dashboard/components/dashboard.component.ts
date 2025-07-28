@@ -14,12 +14,12 @@ import { CommonModule } from '@angular/common';
 export class DashboardComponent implements OnInit {
 
   private dashboardService = inject(DashboardService)
-  dashboard = signal<Dashboard | null>(null);
+  dashboard = signal<Dashboard | undefined>(undefined);
   ngOnInit(): void {
 
     this.dashboardService.getData().subscribe({
       next: (res) => {
-        this.dashboard.set(res)
+        this.dashboard.set(res ?? { recent_activities: [] });
       },
       error: (err) => console.error(err)
     })

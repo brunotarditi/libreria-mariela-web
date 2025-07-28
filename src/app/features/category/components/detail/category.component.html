@@ -1,0 +1,52 @@
+<div class="header">
+  <app-title [title]="'Categorías'" [icon]="'category'"></app-title>
+  <button mat-fab extended (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>Volver
+  </button>
+</div>
+
+<div class="container">
+  <mat-card class="card-form">
+    @if(!hasExist){
+      <div class="btn-container">
+        <button mat-flat-button (click)="addField()" class="btn">
+          <mat-icon>add</mat-icon>Agregar campo
+        </button>
+        <button mat-flat-button (click)="deleteField()" class="btn" [disabled]="categories.length <= 1">
+          <mat-icon>remove</mat-icon>Quitar campo
+        </button>
+      </div>
+    }
+    @if (categoryForm.invalid && categoryForm.touched) {
+      <mat-card-title class="title error-message">
+        Complete el formulario para guardar la categoría
+      </mat-card-title>
+    } @else{
+      <mat-card-title class="title">
+        Añade una o hasta 10 categorías
+      </mat-card-title>
+    }
+    <mat-card-content>
+      <form #formDirective="ngForm" class="form" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div formArrayName="categories">
+          @for (name of categories.controls; track i; let i = $index){
+            <mat-form-field class="w100" appearance="fill" >
+              <mat-label>Nombre</mat-label>
+              <input type="text" matInput [formControlName]="i" placeholder="Ej. Bic">
+              @if(categories.at(i).hasError('required') && categories.at(i).touched) {
+                <mat-error>
+                  El nombre es <strong>requerido</strong>
+                </mat-error>
+              }
+            </mat-form-field>
+          }
+        </div>
+        <mat-card-actions>
+          <button mat-fab extended class="btn btn-save w100" type="submit" [disabled]="categoryForm.invalid">
+            Guardar
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

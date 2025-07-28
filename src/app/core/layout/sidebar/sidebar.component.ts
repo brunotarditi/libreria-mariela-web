@@ -5,8 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MenuComponent } from '@shared/components/menu/menu.component';
-import { ListItem } from '@shared/models/list_item';
+import { Item } from '@shared/models/item';
 import { StorageService } from '@shared/services/storage.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,46 +25,59 @@ import { StorageService } from '@shared/services/storage.service';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input() isOpen: boolean = true;
-  @Input() status: string = 'open';
+  @Input() isOpen: boolean = true
+  @Input() status: string = 'open'
   mode: boolean = true;
-  iconMode: string = 'light_mode';
+  iconMode: string = 'light_mode'
   textMode: string = 'Modo claro'
 
-  private renderer = inject(Renderer2);
-  private storageService = inject(StorageService);
+  private renderer = inject(Renderer2)
+  private storageService = inject(StorageService)
+  private router = inject(Router)
 
-  listItems: ListItem[] = [
+  listItems: Item[] = [
     {
       name: 'Dashboard',
       icon: 'dashboard',
-      route: '/dashboard'
+      route: '/dashboard',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE', 'READ']
     },
     {
       name: 'Productos',
       icon: 'store',
-      route: '/products'
-    },
-    {
-      name: 'Proveedores',
-      icon: 'shopping_bag',
-      route: '/suppliers'
-    },
-    {
-      name: 'Clientes',
-      icon: 'person',
-      route: '/customers'
+      route: '/products',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
     },
     {
       name: 'Marcas',
       icon: 'local_offer',
-      route: '/brands'
+      route: '/brands',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
     },
     {
       name: 'Categorias',
       icon: 'category',
-      route: '/categories'
-    }
+      route: '/categories',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+    },
+    {
+      name: 'Proveedores',
+      icon: 'shopping_bag',
+      route: '/suppliers',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+    },
+    {
+      name: 'Clientes',
+      icon: 'person',
+      route: '/customers',
+      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+    },
+    {
+      name: 'Usuarios',
+      icon: 'person_search',
+      route: '/users',
+      allowedRoles: ['ROOT']
+    },
   ]
 
   ngOnInit(): void {
@@ -82,7 +96,6 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-
   toggleTheme(mode: boolean) {
     this.mode = !mode;
     this.iconMode = this.mode ? 'light_mode' : 'dark_mode';
@@ -98,6 +111,10 @@ export class SidebarComponent implements OnInit {
       this.renderer.removeClass(body, 'dark')
       this.storageService.set('mode', this.iconMode)
     }
+  }
+
+  goToHome(){
+    this.router.navigate(['/home'])
   }
 
 }

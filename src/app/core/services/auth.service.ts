@@ -6,6 +6,8 @@ import { Observable } from "rxjs";
 import { environment } from "@environments/environment";
 import { StorageService } from "@shared/services/storage.service";
 import { ACCESS_TOKEN, INFO } from "@core/constants/constants";
+import { Register } from "@core/models/register";
+import { Response } from "@shared/models/response";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,11 @@ export class AuthService {
   private storageService = inject(StorageService);
 
   login(login: Login): Observable<Tokens>{
-    return this.httpClient.post<Tokens>(this.api + 'users/login', login)
+    return this.httpClient.post<Tokens>(this.api + 'auth/login', login)
+  }
+
+  register(register: Register): Observable<Response>{
+    return this.httpClient.post<Response>(this.api + 'auth/register', register)
   }
 
   setToken(value: string, key: string) {
@@ -37,6 +43,10 @@ export class AuthService {
     } else {
         return false;
     }
+  }
+
+  isRoot(): boolean{
+    return this.roles.indexOf('ROOT') > -1
   }
 
 

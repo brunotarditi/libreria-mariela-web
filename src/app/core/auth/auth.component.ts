@@ -11,6 +11,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '@core/services/auth.service';
 import { Login } from '@core/models/login';
 import { ACCESS_TOKEN, INFO } from '@core/constants/constants';
+import { SnackBarService } from '@shared/services/snackbar.service';
+import { Register } from '@core/models/register';
 
 @Component({
   selector: 'app-auth',
@@ -33,6 +35,7 @@ export class AuthComponent {
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
+  private snackBarService = inject(SnackBarService);
 
   passwordVisibility: Record<string, WritableSignal<boolean>> = {
   login: signal(true),
@@ -96,21 +99,45 @@ export class AuthComponent {
     this.isLogin.set(!this.isLogin())
   }
 
-  onSubmit() {
+  onLogin() {
       const login: Login = {
         email: this.emailAuth.value,
         password: this.passwordAuth.value
       }
       this.authService.login(login).subscribe({
-        next: (res) =>{
+        next: (res) => {
           this.authService.setToken(res.access_token, ACCESS_TOKEN)
           this.authService.setToken(res.info, INFO)
         },
-        error: () => this.router.navigate(['/auth']),
+        error: (err) => {
+          this.snackBarService.showSnackBar(`${err.error.error}`, 'error-snackbar', 3000, 'end', 'top')
+          this.router.navigate(['/auth'])
+        },
         complete: () =>  this.router.navigate(['/dashboard'])
 
       })
     }
+
+  onRegister(){
+      const register: Register = {
+        username: this.email.value.split('@')[0],
+        email: this.email.value,
+        password: this.password.value,
+        first_name: this.firstName.value,
+        last_name: this.lastName.value
+      }
+      this.authService.register(register).subscribe({
+        next: (res) => {
+          this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
+        },
+        error: (err) => {
+          this.snackBarService.showSnackBar(`${err.error.error}`, 'error-snackbar', 3000, 'end', 'top')
+          this.signUp()
+        },
+        complete: () =>  this.router.navigate(['/dashboard'])
+
+      })
+  }
 
   goHome() {
     this.router.navigate(['/home']);

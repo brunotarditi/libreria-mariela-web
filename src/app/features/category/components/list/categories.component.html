@@ -1,0 +1,52 @@
+<app-title [title]="'Categorías'" [icon]="'category'"></app-title>
+
+<div class="header-grid">
+  <button mat-fab extended (click)="goToDetail()">
+    <mat-icon>add</mat-icon>Nuevos
+  </button>
+  <mat-form-field class="search">
+    <mat-label>Buscar categoría</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ejemplo: Reglas" #input>
+  </mat-form-field>
+</div>
+
+<div class="mat-elevation-z8 mb-10">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let row">
+        <button  mat-mini-fab color="primary" class="btn-action" matTooltip="Editar categoría" matTooltipPosition="above" (click)="onUpdate(row.ID)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-mini-fab color="warn" class="btn-action" matTooltip="Eliminar categoría" matTooltipPosition="above" (click)="onDelete(row.ID)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-data" colspan="2">
+        <div class="no-data-container">
+          <mat-icon>search_off</mat-icon>
+          <span>
+            {{ input.value ? 'No se encontraron resultados para "' + input.value + '"' : 'No hay datos disponibles' }}
+          </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Selecciona la página de categorías">
+  </mat-paginator>
+</div>

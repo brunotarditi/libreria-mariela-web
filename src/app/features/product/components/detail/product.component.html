@@ -1,17 +1,139 @@
-<p>¡Este es el componente de detalle del producto! {{productId}}</p>
-<section>
-  <div class="example-button-row">
-    <button mat-flat-button (click)="exportExcel()">Exportar modelo</button>
-        <input type="file" (change)="onFileSelected($event)" accept=".xlsx">
-        <button mat-raised-button color="primary" (click)="onImportExcel()"  [disabled]="!selectedFile">
-            <mat-icon>attach_file</mat-icon> Importar excel
-        </button>
-        @if(selectedFile){
-          <span>{{ selectedFile.name }}</span>
-        }
 
-        @if(message){
-          <span>{{ message }}</span>
-        }
-  </div>
-</section>
+<div class="header">
+  <app-title [title]="'Crear producto'" [icon]="'store'"></app-title>
+  <button mat-fab extended (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>Volver
+  </button>
+</div>
+<div class="container">
+  <mat-card class="card-file">
+    <button mat-flat-button (click)="exportExcel()" type="button">
+      <mat-icon>download</mat-icon> Exportar modelo</button>
+    <button type="button" mat-raised-button (click)="fileInput.click()">
+      <mat-icon>attach_file</mat-icon>Adjuntar archivo</button>
+    <input #fileInput type="file" hidden (change)="onFileSelected($event)" id="file" accept=".xlsx">
+    <button mat-raised-button class="btn-import" (click)="onImportExcel()"  [disabled]="!selectedFile" type="button">
+        <mat-icon>cloud</mat-icon> Importar excel
+    </button>
+    @if(selectedFile){
+      <span class="text-file">{{ selectedFile.name }}</span>
+    }
+
+    @if(message){
+      <span class="text-file">{{ message }}</span>
+    }
+  </mat-card>
+</div>
+<div class="container">
+  <mat-card class="card-form">
+    <mat-card-title class="title">Complete el formulario para guardar un producto</mat-card-title>
+    <mat-card-content>
+      <form class="form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="w100" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input type="text" matInput formControlName="name" placeholder="Ej. Lapicera">
+            @if(name.hasError('required') && name.touched) {
+              <mat-error>
+                El nombre es <strong>requerido</strong>
+              </mat-error>
+            }
+
+            @if(name.hasError('maxlength') && name.touched) {
+              <mat-error>
+                El nombre excede los <strong>65 caracteres</strong>
+              </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input type="text" matInput formControlName="code" placeholder="Ej. B-1234">
+            @if(code.hasError('required') && code.touched) {
+              <mat-error>
+                El código es <strong>requerido</strong>
+              </mat-error>
+            }
+            @if(code.hasError('maxlength') && code.touched) {
+              <mat-error>
+                El código excede los <strong>20 caracteres</strong>
+              </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-label>Sku</mat-label>
+          <input type="text" matInput formControlName="sku" placeholder="Ej. SKU123">
+            @if(sku.hasError('maxlength') && sku.touched) {
+              <mat-error>
+                El sku excede los <strong>20 caracteres</strong>
+              </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-label>Margen de ganancia</mat-label>
+          <input type="text" matInput formControlName="profitMargin" placeholder="Ej. 20">
+            @if(profitMargin.hasError('required') && profitMargin.touched) {
+              <mat-error>
+                El margen de ganancia es <strong>requerido</strong>
+              </mat-error>
+            }
+
+            @if(profitMargin.hasError('max') && profitMargin.touched) {
+              <mat-error>
+                El margen de ganancia no puede superar el <strong>100%</strong>
+              </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-select required formControlName="category">
+            <mat-option value="0">
+              <button class="add-option" (click)="addCategory()">Agregar una categoría</button>
+            </mat-option>
+            @for(category of categories; track $index){
+              <mat-option [value]="category.ID">{{category.name}}</mat-option>
+            }
+          </mat-select>
+          <mat-label>
+            <mat-icon>category</mat-icon> Seleccione una categoria
+          </mat-label>
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-select required formControlName="brand">
+            <mat-option value="0">
+              <button class="add-option" (click)="addBrand()">Agregar una marca</button>
+            </mat-option>
+            @for(brand of brands; track $index){
+              <mat-option [value]="brand.ID">{{brand.name}}</mat-option>
+            }
+          </mat-select>
+          <mat-label>
+            <mat-icon>local_offer</mat-icon> Seleccione una marca
+          </mat-label>
+        </mat-form-field>
+
+        <mat-form-field class="w100" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" placeholder="Ej. Lapicera de color azul">
+            @if(description.hasError('maxlength') && description.touched) {
+              <mat-error>
+                La descripción excede los <strong>150 caracteres</strong>
+              </mat-error>
+            }
+          </textarea>
+        </mat-form-field>
+
+        <mat-card-actions>
+          <button mat-fab extended class="btn-save w100" type="submit" [disabled]="productForm.invalid">
+            Guardar
+          </button>
+
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+

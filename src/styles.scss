@@ -12,6 +12,7 @@
   /* === COLORS === */
   --primary-color: #576CBC;
   --navlink-color: #576CBC;
+  --btn-color: #576CBC;
   --panel-color: #FFF;
   --text-color: #242626;
   --dark-light-color: #242626;
@@ -25,25 +26,23 @@
   --box3-color: #FDF7C3;
 
   --tran-05: all 0.5s ease;
+  --tran-04: all 0.4s ease;
   --tran-03: all 0.3s ease;
   --tran-02: all 0.2s ease;
 }
 
 @include mat.button-overrides((
-    filled-container-color: #576CBC,
-));
-
-@include mat.expansion-overrides((
-    container-background-color: #FFF,
+    filled-container-color: var(--primary-color),
 ));
 
 @include mat.form-field-overrides((
   container-text-size: 12px,
-  filled-caret-color: #576CBC,
+  filled-caret-color:  var(--primary-color),
   filled-label-text-size: 13px,
-  filled-focus-active-indicator-color: #576CBC,
-  filled-focus-label-text-color: #576CBC,
-  filled-input-text-color: #576CBC,
+  outlined-label-text-size: 13px,
+  filled-focus-active-indicator-color:  var(--primary-color),
+  filled-focus-label-text-color:  var(--primary-color),
+  filled-input-text-color:  var(--primary-color),
   filled-label-text-color: rgba(0, 0, 0, 0.6),
   filled-container-color: #FFF,
 ));
@@ -54,6 +53,14 @@
 
 @include mat.paginator-overrides((
     container-background-color: #FFF,
+));
+
+@include mat.chips-overrides((
+    outline-color: var(--primary-color),
+));
+
+@include mat.card-overrides((
+    elevated-container-color: #FFF,
 ));
 
 .success-snackbar {
@@ -122,13 +129,67 @@ body.dark {
     color: #FFF;
   }
 
-  .card{
+
+  .subtitle {
+    color: #dedede;
+  }
+
+  .title {
+      color: #FFF;
+  }
+
+  .form {
+      background-color: #2c2d2d;
+  }
+
+  .btn{
+    color: #FFF;
+  }
+
+  .btn-save {
+    color: #FFF;
     background-color: #242626;
   }
 
-  .subtitle {
-  color: #dedede;
-}
+  .btn-save:disabled {
+    color: #efefef;
+    opacity: 0.8;
+    background-color: #343434;
+  }
+
+  .btn-import{
+    color: #FFF;
+    background-color: #242626;
+  }
+
+  .text-file{
+    color: #FFF;
+  }
+
+  .btn-password mat-icon{
+    color: #838488;
+  }
+
+  .footer-home{
+    color: #FFF;
+    background-color: #242626;
+  }
+  .welcome-section{
+    color: #FFF;
+  }
+
+  .features-section {
+    color: #FFF;
+  }
+
+  .features-section h2 {
+    color: #FFF;
+  }
+
+  .feature-card mat-icon {
+    color: #FFF;
+  }
+
 
   @include mat.table-overrides((
     background-color: #242626,
@@ -143,15 +204,35 @@ body.dark {
   ));
 
   @include mat.form-field-overrides((
-    filled-container-color: #242626,
-    filled-label-text-color: #FFF,
+    filled-caret-color: #FFF,
     filled-focus-active-indicator-color: #FFF,
+    filled-focus-label-text-color: #FFF,
+    filled-container-color: #343434,
+    filled-label-text-color: #FFF,
+    filled-hover-label-text-color: #dddddd,
+    filled-input-text-color:  #FFF,
+    filled-input-text-placeholder-color: #838488,
+    outlined-caret-color: #FFF,
+    outlined-focus-outline-color: #576CBC,
+    outlined-focus-label-text-color: #576CBC,
+    outlined-label-text-color: #FFF,
+    outlined-hover-label-text-color: #FFF,
+    outlined-input-text-color: #FFF,
+    outlined-input-text-placeholder-color: #838488,
+    outlined-outline-color: #FFF,
+    outlined-hover-outline-color: #838488,
+    trailing-icon-color:#838488,
   ));
 
-  @include mat.expansion-overrides((
-      container-background-color: #242626,
-      header-text-color: #FFF,
-      header-description-color: #FFF
+  @include mat.select-overrides((
+    panel-background-color: #343434,
+    enabled-trigger-text-color: #FFF,
+    focused-arrow-color: #FFF,
+    placeholder-text-color: #FFF,
+  ));
+
+  @include mat.card-overrides((
+    elevated-container-color: #2c2d2d,
   ));
 
 }

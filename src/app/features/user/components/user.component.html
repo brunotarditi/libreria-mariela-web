@@ -1,0 +1,83 @@
+<app-title [title]="'Usuarios'" [icon]="'person_search'"></app-title>
+
+<div class="header-grid">
+  <mat-form-field class="search">
+    <mat-label>Buscar usuarios</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ejemplo: Fito" #input>
+  </mat-form-field>
+</div>
+
+<div class="mat-elevation-z8 mb-10">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="user_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
+      <td mat-cell *matCellDef="let row"> {{row.user_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="created_at">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Creación </th>
+      <td mat-cell *matCellDef="let row"> {{row.created_at | date:'dd/MM/yyyy':'es-ES' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="is_active">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+      <td mat-cell *matCellDef="let row">
+        @if(row.is_active){
+          <span class="circle active" matTooltip="El usuario está activado"></span>
+        } @else{
+          <span class="circle desactive" matTooltip="El usuario no se ha activado"></span>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="last_login">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Último inicio de sesión </th>
+        <td mat-cell *matCellDef="let row"> {{row.last_login | date:'dd/MM/yyyy - HH:mm':'es-ES'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="roles">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Roles </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-chip-set aria-label="Fish selection">
+          @for(rol of row.roles; track i; let i = $index){
+            <mat-chip>{{rol}}</mat-chip>
+          }
+        </mat-chip-set>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let row">
+          @if(!isRoot(row.roles)){
+            <button mat-mini-fab class="btn-action" [matTooltip]="row.is_active ? 'Desactivar usuario' : 'Activar usuario'" matTooltipPosition="above" (click)="isActive(row.id, !row.is_active)">
+              <mat-icon>{{row.is_active ? 'gpp_bad' : 'check_circle'}}</mat-icon>
+            </button>
+            <button mat-mini-fab class="btn-action" matTooltip="Asignar rol" matTooltipPosition="above" (click)="assignRole(row.id)">
+              <mat-icon>add_moderator</mat-icon>
+            </button>
+          }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell no-data" colspan="2">
+        <div class="no-data-container">
+          <mat-icon>search_off</mat-icon>
+          <span>
+            {{ input.value ? 'No se encontraron resultados para "' + input.value + '"' : 'No hay datos disponibles' }}
+          </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Selecciona la página de usuarios">
+  </mat-paginator>
+</div>

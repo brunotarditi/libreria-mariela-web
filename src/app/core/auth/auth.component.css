@@ -36,7 +36,7 @@ a {
   position: relative;
   height: 100vh;
   width: 100%;
-  background-color: #576CBC;
+  background-color: var(--primary-color);
 }
 
 .background::before {
@@ -50,7 +50,6 @@ a {
   pointer-events: none;
   transition: var(--tran-05);
 }
-
 
 /* FORM CONTAINER */
 .form_container {
@@ -84,7 +83,7 @@ a {
 }
 
 .form_container .btn-login {
-  background-color: #576CBC;
+  background-color:  var(--btn-color);
   margin-top: 30px;
   width: 100%;
   padding: 10px 0;
@@ -121,7 +120,7 @@ a {
 }
 
 .link {
-  color: #576CBC;
+  color:  var(--btn-color);
   font-size: 12px;
 }
 

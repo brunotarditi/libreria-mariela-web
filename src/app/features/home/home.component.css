@@ -1,0 +1,92 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header-section {
+  background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.header-section h1 {
+  font-size: 2.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.header-section .subtitle {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+.welcome-section {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 10px;
+  color: #242626;
+}
+
+.features-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.features-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.features-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.feature-card {
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.3s ease;
+  border-radius: 12px;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card mat-icon {
+  font-size: 20px;
+  color: #3f51b5;
+  margin-bottom: 10px;
+}
+
+.feature-card h3 {
+  margin: 10px 0;
+  font-size: 1.5rem;
+}
+
+.feature-card button {
+  margin-top: 15px;
+}
+
+.button-icon {
+  margin-right: 5px;
+}
+
+.footer-home {
+  margin-top: auto;
+  padding: 20px;
+  text-align: center;
+  background-color: #f2f2f2;
+  font-size: 0.9rem;
+}
+
+.footer-home a {
+  color: #3f51b5;
+  text-decoration: none;
+}

@@ -1,0 +1,42 @@
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.btn-action {
+  color: #fff;
+  background-color:  var(--btn-color);
+  margin: 0px 5px;
+}
+
+.btn-action:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+  transition: var(--tran-02);
+}
+
+.search{
+  width: 350px;
+  padding: 5px;
+}
+
+.header-grid{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 5px;
+}
+
+.no-data-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: #757575;
+  font-size: 18px;
+}
+
+.no-data-container mat-icon {
+  color: #757575;
+}
+
+

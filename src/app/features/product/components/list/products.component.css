@@ -1,9 +1,31 @@
-.mt-10 {
-  margin-top: 10px;
+.search{
+  width: 350px;
+  padding: 5px;
 }
 
 .btn-action {
   color: #fff;
-  background-color: #576cbc;
-  margin: 0 5px;
+  background-color:  var(--btn-color);
+  margin: 0px 5px;
 }
+
+.header-grid{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 5px;
+}
+
+.no-data-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: #757575;
+  font-size: 18px;
+}
+
+.no-data-container mat-icon {
+  color: #757575;
+}
+

@@ -12,12 +12,9 @@
 }
 
 .card {
-  background-color: #ffffff;
   padding: 16px;
   width: 100%;
   box-shadow: none;
-
-
 }
 
 .subtitle {
@@ -48,13 +45,13 @@
 
 .btn-action {
   color: #fff;
-  background-color: #576cbc;
+  background-color:  var(--btn-color);
   margin: 0 5px;
 }
 
 .card .btn-save {
   color: #fff;
-  background-color: #576cbc;
+  background-color: var(--btn-color);
   margin-top: 20px;
   padding: 10px 30px;
   border-radius: 6px;
@@ -71,6 +68,36 @@
 .btn-action:hover {
   opacity: 0.9;
   transform: scale(1.02);
-  transition: all 0.2s ease;
+  transition: var(--tran-02);
 }
 
+.circle{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.active{
+  background-color: rgb(11, 189, 14);
+}
+
+.desactive{
+  background-color: rgb(211, 10, 10);
+}
+
+.no-data-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: #757575;
+  font-size: 18px;
+}
+
+.no-data-container mat-icon {
+  color: #757575;
+}
+
+.form {
+  padding: 16px;
+}

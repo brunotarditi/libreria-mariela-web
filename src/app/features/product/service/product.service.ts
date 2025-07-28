@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { Product } from '../model/product';
+import { Product, ProductData } from '../model/product';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,8 +12,8 @@ export class ProductService {
   private api = environment.api;
   private httpClient = inject(HttpClient);
 
-  getAll(): Observable<Product[]>{
-    return this.httpClient.get<Product[]>(this.api + 'products')
+  getAll(): Observable<ProductData[]>{
+    return this.httpClient.get<ProductData[]>(this.api + 'products')
   }
 
   getById(id: number): Observable<Product>{

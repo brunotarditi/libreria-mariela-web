@@ -71,6 +71,24 @@
   color: var(--text-color);
 }
 
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: #FFF;
+  border-radius: 8px;
+  min-height: 100px; /* Asegura un espacio visible */
+}
+
+.no-data-message {
+  font-size: 16px;
+  color: #757575;
+  font-weight: 500;
+  text-align: center;
+}
+
 @media (max-width: 1000px) {
   .activity-data {
     overflow-y: scroll;

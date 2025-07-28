@@ -15,7 +15,7 @@
         <mat-card-title>Iniciar sesión</mat-card-title>
         <mat-card-content>
           @if(isLogin()){
-            <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="authForm" (ngSubmit)="onLogin()">
               <mat-form-field class="w100" appearance="fill">
                 <mat-label>Email</mat-label>
                   <input id="email" type="email" matInput formControlName="email" placeholder="Correo electrónico">
@@ -31,7 +31,7 @@
               <mat-form-field class="w100" appearance="fill">
                   <mat-label>Contraseña</mat-label>
                   <input id="password" matInput formControlName="password" [type]="passwordVisibility['login']() ? 'password' : 'text'" placeholder="Contraseña" autocomplete="off" />
-                  <button mat-icon-button matSuffix type="button" (click)="onChangePasswordIcon('login', $event)">
+                  <button class="btn-password" matSuffix mat-icon-button type="button" (click)="onChangePasswordIcon('login', $event)">
                     <mat-icon>{{passwordVisibility['login']() ? 'visibility_off' : 'visibility'}}</mat-icon>
                   </button>
                   @if (passwordAuth!.hasError('required') && passwordAuth!.touched) {
@@ -52,7 +52,7 @@
               </div>
             </form>
           } @else {
-              <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
                 <mat-form-field class="w100" appearance="fill">
                   <mat-label>Nombre</mat-label>
                     <input id="nombre" type="text" matInput formControlName="firstName" placeholder="Nombre">
@@ -86,7 +86,7 @@
               <mat-form-field class="w100" appearance="fill">
                   <mat-label>Contraseña</mat-label>
                   <input id="password" matInput formControlName="password" [type]="passwordVisibility['registerPass']() ? 'password' : 'text'" placeholder="Contraseña" autocomplete="off" />
-                  <button mat-icon-button matSuffix type="button" (click)="onChangePasswordIcon('registerPass', $event)">
+                  <button class="btn-password" mat-icon-button matSuffix type="button" (click)="onChangePasswordIcon('registerPass', $event)">
                     <mat-icon>{{passwordVisibility['registerPass']() ? 'visibility_off' : 'visibility'}}</mat-icon>
                   </button>
                   @if (password!.hasError('required') && password!.touched) {
@@ -97,7 +97,7 @@
               <mat-form-field class="w100" appearance="fill">
                 <mat-label>Confirme contraseña</mat-label>
                 <input id="confirmPassword" matInput formControlName="confirmPassword" [type]="passwordVisibility['registerConfirmPass']() ? 'password' : 'text'" placeholder="Contraseña" autocomplete="off" />
-                <button mat-icon-button matSuffix type="button" (click)="onChangePasswordIcon('registerConfirmPass', $event)">
+                <button class="btn-password" mat-icon-button matSuffix type="button" (click)="onChangePasswordIcon('registerConfirmPass', $event)">
                   <mat-icon>{{passwordVisibility['registerConfirmPass']() ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 @if (confirmPassword!.hasError('required') && confirmPassword!.touched) {
