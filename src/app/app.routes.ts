@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from '@core/auth/login/login.component';
+import { PasswordResetComponent } from '@core/auth/password-reset/passwordreset.component';
+import { RegisterComponent } from '@core/auth/register/register.component';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { RoleGuard } from '@core/guards/role.guard';
 import { LayoutComponent } from '@core/layout/layout/layout.component';
@@ -27,7 +30,7 @@ export const routes: Routes = [
         path: 'brands',
         loadComponent: () => import('./features/brand/components/list/brands.component').then(c => c.BrandsComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
       },
       {
         path: 'brands/detail/:id',
@@ -39,7 +42,7 @@ export const routes: Routes = [
         path: 'categories',
         loadComponent: () => import('./features/category/components/list/categories.component').then(c => c.CategoriesComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
       },
       {
         path: 'categories/detail/:id',
@@ -51,7 +54,7 @@ export const routes: Routes = [
         path: 'products',
         loadComponent: () => import('./features/product/components/list/products.component').then(c => c.ProductsComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
       },
       {
         path: 'products/detail/:id',
@@ -63,7 +66,7 @@ export const routes: Routes = [
         path: 'suppliers',
         loadComponent: () => import('./features/supplier/components/list/suppliers.component').then(c => c.SuppliersComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
       },
       {
         path: 'suppliers/detail/:id',
@@ -75,7 +78,7 @@ export const routes: Routes = [
         path: 'customers',
         loadComponent: () => import('./features/customer/components/list/customers.component').then(c => c.CustomersComponent),
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
       },
       {
         path: 'customers/detail/:id',
@@ -94,7 +97,31 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadComponent: () => import('./core/auth/auth.component').then(c => c.AuthComponent),
+    children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      {
+        path: 'login',
+        loadComponent: () => import('./core/auth/login/login.component').then(c => c.LoginComponent),
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('./core/auth/register/register.component').then(c => c.RegisterComponent),
+      },
+      {
+        path: 'reset-password',
+        loadComponent: () => import('./core/auth/password-reset/passwordreset.component').then(c => c.PasswordResetComponent),
+      },
+      {
+        path: 'reset-password/:token',
+        loadComponent: () => import('./core/auth/password-reset/passwordreset.component').then(c => c.PasswordResetComponent),
+      },
+      {
+        path: 'verify-email/:token',
+        loadComponent: () => import('./core/auth/verify-email/verifyemail.component').then(c => c.VerifyEmailComponent),
+      },
+    ]
   },
+
   {
     path: '**',
     redirectTo: 'dashboard',

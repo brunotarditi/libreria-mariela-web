@@ -1,6 +1,6 @@
 <app-title [title]="'Clientes'" [icon]="'person'"></app-title>
 <div class="header-grid">
-  <button mat-fab extended (click)="goToDetail()">
+  <button mat-fab extended (click)="goToDetail()" [disabled]="!permission()">
     <mat-icon>add</mat-icon>Nuevos
   </button>
   <mat-form-field class="search">
@@ -25,10 +25,10 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let row">
-        <button  mat-mini-fab class="btn-action" matTooltip="Editar cliente" matTooltipPosition="above" (click)="onUpdate(row.ID)">
+        <button  mat-mini-fab class="btn-action" matTooltip="Editar cliente" matTooltipPosition="above" (click)="onUpdate(row.ID)" [disabled]="!permission()">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-mini-fab class="btn-action" matTooltip="Eliminar cliente" matTooltipPosition="above" (click)="onDelete(row.ID)">
+        <button mat-mini-fab class="btn-action" matTooltip="Eliminar cliente" matTooltipPosition="above" (click)="onDelete(row.ID)" [disabled]="!permission()">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

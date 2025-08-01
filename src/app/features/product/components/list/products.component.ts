@@ -7,10 +7,12 @@ import { ProductService } from '@features/product/service/product.service';
 import { ProductData } from '../../model/product';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@shared/services/snackbar.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -34,14 +36,13 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  private productService = inject(ProductService);
-  private snackBarService = inject(SnackBarService);
-  private router = inject(Router)
+  allowed_roles: string[] = ['ROOT', 'ADMIN' ,'WRITE'];
 
-  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-  isUpdate: boolean = false;
-  id: number = 0;
+  private productService = inject(ProductService);
+  private authService = inject(AuthService);
+  private snackBarService = inject(SnackBarService);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   ngAfterViewInit() {
     if(this.dataSource && this.paginator && this.sort){
@@ -51,13 +52,12 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getData()
+    this.getData();
   }
 
   getData(){
     this.productService.getAll().subscribe({
       next: (res) => {
-        console.log(res);
         this.dataSource = new MatTableDataSource<ProductData>(res)
         this.dataSource.filterPredicate = (data: ProductData, filter: string) => {
           return data.name.trim().toLowerCase().indexOf(filter) !== -1
@@ -86,12 +86,29 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: number) {
-    this.productService.deleteById(id).subscribe({
-      next: (res: any) => {
-        this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
-          this.getData()
-        },
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      width: '400px',
+      data: {
+        title: 'Eliminar producto',
+        message: "¿Estás seguro de eliminar este producto?"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.productService.deleteById(id).subscribe({
+          next: (res: any) => {
+            this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
+            this.getData()
+          },
+        })
+      }
     })
+  }
+
+  permission(){
+    const userRoles = this.authService.roles;
+    return this.allowed_roles.some(role => userRoles.includes(role));
   }
 
   goToDetail(){

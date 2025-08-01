@@ -1,24 +1,47 @@
-<h2 mat-dialog-title>Crea tu {{ entityName }}</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 <mat-dialog-content>
-  <form class="form" [formGroup]="entityForm">
-        <mat-form-field class="w100" appearance="outline">
-          <mat-label>Nombre de la {{ entityName | lowercase }}</mat-label>
-          <input type="text" matInput formControlName="name">
-            @if(name.hasError('required') && name.touched) {
-              <mat-error>
-                El nombre es <strong>requerido</strong>
-              </mat-error>
+  @if (this.data.fields) {
+    <form class="form" [formGroup]="entityForm">
+            @for (field of data.fields; track fieldIndex ; let fieldIndex  = $index){
+              @switch (field.type) {
+                @case ('text') {
+                  <mat-form-field class="w100" appearance="outline">
+                    <mat-label>{{ field.label }}</mat-label>
+                    <input type="text" matInput [formControlName]="field.name" />
+                    @if(entityForm.get(field.name)?.hasError('required') && entityForm.get(field.name)?.touched){
+                      <mat-error>
+                        El {{ field.label }} es <strong>requerido.</strong>
+                      </mat-error>
+                    }
+                    @if(entityForm.get(field.name)?.hasError('maxlength')) {
+                      <mat-error>
+                        El {{ field.label }} excede los <strong>65 caracteres</strong>
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                }
+                @case ('select') {
+                  <mat-form-field class="w100" appearance="outline">
+                    <mat-label>{{ field.label }}</mat-label>
+                    <mat-select [formControlName]="field.name">
+                      @for (option of field.options ?? []; track option) {
+                        <mat-option [value]="option.id">{{ option.text }}</mat-option>
+                      }
+                    </mat-select>
+                    @if (entityForm.get(field.name)?.hasError('required') && entityForm.get(field.name)?.touched) {
+                        <mat-error>
+                          El {{ field.label }} es <strong>requerido</strong>
+                        </mat-error>
+                      }
+                  </mat-form-field>
+                }
+              }
             }
-
-            @if(name.hasError('maxlength') && name.touched) {
-              <mat-error>
-                El nombre excede los <strong>65 caracteres</strong>
-              </mat-error>
-            }
-        </mat-form-field>
-      </form>
+    </form>
+  }
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="save()" [disabled]="!entityForm.valid">Guardar</button>
-  <button mat-button (click)="cancel()">Cancelar</button>
+  <button class="btn-dialog-save" type="button" mat-flat-button (click)="save()" [disabled]="!entityForm.valid">Guardar</button>
+  <button class="btn-dialog-cancel" type="button" mat-stroked-button (click)="cancel()">Cancelar</button>
 </mat-dialog-actions>
+

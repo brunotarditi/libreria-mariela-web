@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
-interface DialogData {
-  type: 'category' | 'brand'
-}
+import { MatSelectModule } from '@angular/material/select';
+import { FieldControlConfig, DialogFormData } from '@shared/models/dialog';
 
 @Component({
   selector: 'app-dialog-form',
@@ -18,6 +16,7 @@ interface DialogData {
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     FormsModule,
     MatButtonModule,
     MatDialogTitle,
@@ -27,27 +26,36 @@ interface DialogData {
   ],
 
 })
-export class DialogFormComponent {
+export class DialogFormComponent implements OnInit {
 
   readonly dialogRef = inject(MatDialogRef<DialogFormComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  private formBuilder = inject(FormBuilder)
+  readonly data = inject<DialogFormData>(MAT_DIALOG_DATA);
+  private formBuilder = inject(FormBuilder);
 
-  entityForm = this.formBuilder.group({
-    name: ['', [Validators.required,  Validators.maxLength(65)]],
-  });
+  entityForm = this.formBuilder.group({});
 
-  get name() {
-    return this.entityForm.get('name') as FormControl
+  ngOnInit(): void {
+    if (this.data.fields) {
+      this.addControl(this.data.fields);
+    }
   }
 
-  get entityName(): string {
-    return this.data.type === 'category' ? 'Categoría' : 'Marca';
+  addControl(fieldsConfig: FieldControlConfig[]): void {
+    fieldsConfig.forEach((control) => {
+      this.entityForm.addControl(
+        control.name,
+        this.formBuilder.control('', control.validators ?? [])
+      );
+    });
+  }
+
+  get title(): string {
+    return this.data.title;
   }
 
   save(){
     if (this.entityForm.valid) {
-      this.dialogRef.close(this.name.value);
+      this.dialogRef.close(this.entityForm.value);
     }
   }
 

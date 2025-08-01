@@ -12,6 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-categories',
@@ -37,9 +40,13 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
+  allowed_roles: string[] = ['ROOT', 'ADMIN' ,'WRITE'];
+
   private categoryService = inject(CategoryService);
+  private authService = inject(AuthService);
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   ngAfterViewInit() {
     if(this.dataSource && this.paginator && this.sort){
@@ -86,12 +93,29 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: number) {
-    this.categoryService.deleteById(id).subscribe({
-      next: (res: any) => {
-        this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
-          this.getData()
-        },
-    })
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      width: '400px',
+      data: {
+        title: 'Eliminar categoría',
+        message: "¿Estás seguro de eliminar esta categoría?"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.categoryService.deleteById(id).subscribe({
+          next: (res: any) => {
+            this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
+              this.getData()
+            },
+        })
+      }
+    });
+  }
+
+  permission(){
+    const userRoles = this.authService.roles;
+    return this.allowed_roles.some(role => userRoles.includes(role));
   }
 
   goToDetail(){

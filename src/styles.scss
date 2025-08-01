@@ -40,11 +40,15 @@
   filled-caret-color:  var(--primary-color),
   filled-label-text-size: 13px,
   outlined-label-text-size: 13px,
-  filled-focus-active-indicator-color:  var(--primary-color),
-  filled-focus-label-text-color:  var(--primary-color),
-  filled-input-text-color:  var(--primary-color),
+  filled-focus-active-indicator-color: var(--primary-color),
+  filled-focus-label-text-color: var(--primary-color),
+  filled-input-text-color: var(--primary-color),
   filled-label-text-color: rgba(0, 0, 0, 0.6),
   filled-container-color: #FFF,
+  outlined-caret-color: var(--primary-color),
+  outlined-focus-outline-color: var(--primary-color),
+  outlined-focus-label-text-color: var(--primary-color),
+  select-option-text-color:red,
 ));
 
 @include mat.table-overrides((
@@ -63,6 +67,11 @@
     elevated-container-color: #FFF,
 ));
 
+@include mat.dialog-overrides((
+    container-color: #FFF,
+));
+
+
 .success-snackbar {
   @include mat.snack-bar-overrides((
     container-color: #229b26, // Verde para éxito
@@ -78,7 +87,6 @@
     button-color: white
   ));
 }
-
 
 body {
   min-height: 100vh;
@@ -190,6 +198,24 @@ body.dark {
     color: #FFF;
   }
 
+  .btn-dialog-cancel{
+    color: #FFF;
+  }
+
+  .btn-dialog-save{
+    background-color: #242626;
+    color: #FFF;
+  }
+
+  .btn-dialog-save:disabled {
+    color: #dfdfdf;
+    opacity: 0.8;
+    background-color: #343434;
+  }
+
+  .message{
+    color: #FFF;
+  }
 
   @include mat.table-overrides((
     background-color: #242626,
@@ -234,5 +260,10 @@ body.dark {
   @include mat.card-overrides((
     elevated-container-color: #2c2d2d,
   ));
+
+  @include mat.dialog-overrides((
+    container-color: #2c2d2d,
+    subhead-color: #FFF
+));
 
 }

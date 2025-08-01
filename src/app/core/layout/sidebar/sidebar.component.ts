@@ -8,6 +8,7 @@ import { MenuComponent } from '@shared/components/menu/menu.component';
 import { Item } from '@shared/models/item';
 import { StorageService } from '@shared/services/storage.service';
 import { Router } from '@angular/router';
+import { ALLOWED_ROLES } from '@core/constants/constants';
 
 
 @Component({
@@ -40,37 +41,37 @@ export class SidebarComponent implements OnInit {
       name: 'Dashboard',
       icon: 'dashboard',
       route: '/dashboard',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE', 'READ']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Productos',
       icon: 'store',
       route: '/products',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Marcas',
       icon: 'local_offer',
       route: '/brands',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Categorias',
       icon: 'category',
       route: '/categories',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Proveedores',
       icon: 'shopping_bag',
       route: '/suppliers',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Clientes',
       icon: 'person',
       route: '/customers',
-      allowedRoles: ['ROOT', 'ADMIN' ,'WRITE']
+      allowedRoles: ALLOWED_ROLES
     },
     {
       name: 'Usuarios',

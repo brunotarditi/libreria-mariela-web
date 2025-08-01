@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CustomerService } from '@features/customer/services/customer.service';
 import { Customer } from '../../model/customer';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirective, FormGroup } from '@angular/forms';
+import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { TitleComponent } from '@shared/components/title/title.component';

@@ -12,6 +12,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { AuthService } from '@core/services/auth.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-brands',
@@ -23,6 +27,7 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatTableModule,
     MatSortModule,
+    MatTooltipModule,
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
@@ -37,9 +42,13 @@ export class BrandsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
+  allowed_roles: string[] = ['ROOT', 'ADMIN' ,'WRITE'];
+
   private brandService = inject(BrandService);
+  private authService = inject(AuthService);
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   ngAfterViewInit() {
     if(this.dataSource && this.paginator && this.sort){
@@ -49,7 +58,7 @@ export class BrandsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getData()
+    this.getData();
   }
 
   getData(){
@@ -82,12 +91,29 @@ export class BrandsComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: number) {
-    this.brandService.deleteById(id).subscribe({
-      next: (res: any) => {
-        this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
-          this.getData()
-        },
-    })
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      width: '400px',
+      data: {
+        title: 'Eliminar marca',
+        message: "¿Estás seguro de eliminar esta marca?"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.brandService.deleteById(id).subscribe({
+          next: (res: any) => {
+            this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
+              this.getData()
+            },
+        })
+      }
+    });
+  }
+
+  permission(){
+    const userRoles = this.authService.roles;
+    return this.allowed_roles.some(role => userRoles.includes(role));
   }
 
   goToDetail(){

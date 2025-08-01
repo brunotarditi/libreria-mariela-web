@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '@features/brand/model/brand';
 import { BrandService } from '@features/brand/services/brand.service';
@@ -18,6 +17,7 @@ import { Product } from '@features/product/model/product';
 import { ProductService } from '@features/product/service/product.service';
 import { DialogFormComponent } from '@shared/components/dialog/form/dialog-form.component';
 import { TitleComponent } from '@shared/components/title/title.component';
+import { FieldControlConfig } from '@shared/models/dialog';
 import { SnackBarService } from '@shared/services/snackbar.service';
 
 
@@ -96,7 +96,6 @@ export class ProductComponent implements OnInit {
     this.loadCategories();
     this.loadBrands();
     this.productId = this.route.snapshot.params['id'];
-    console.log(this.productId);
     if (this.productId === 'create') {
       this.productForm.setValue({
         name: '',
@@ -162,7 +161,7 @@ export class ProductComponent implements OnInit {
           this.productForm.reset();
           this.router.navigate(['/products'])
         },
-        error: (err) => {
+        error: () => {
           this.snackBarService.showSnackBar('Error al crear el producto', 'error-snackbar', 3000, 'end', 'top')
         },
       });
@@ -174,13 +173,16 @@ export class ProductComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       data: {
-        type: 'category',
+        title: 'Crea tu categoría',
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', validators: [Validators.required, Validators.maxLength(65)] },
+        ] as FieldControlConfig[]
       },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        const category: Category = {ID:0, name: result}
+        const category: Category = {ID:0, name: result.name}
         this.categoryService.save(category).subscribe({
           next: (res) => {
             this.categories = [...this.categories, res]
@@ -200,13 +202,16 @@ export class ProductComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       data: {
-        type: 'brand',
+        title: 'Crea tu categoría',
+        fields: [
+          { name: 'name', label: 'Nombre', type: 'text', validators: [Validators.required] },
+        ] as FieldControlConfig[]
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        const brand: Brand = {ID:0, name: result}
+        const brand: Brand = {ID:0, name: result.name}
         this.brandService.save(brand).subscribe({
           next: (res) => {
             this.brands = [...this.brands, res]

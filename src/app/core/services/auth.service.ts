@@ -8,6 +8,7 @@ import { StorageService } from "@shared/services/storage.service";
 import { ACCESS_TOKEN, INFO } from "@core/constants/constants";
 import { Register } from "@core/models/register";
 import { Response } from "@shared/models/response";
+import { PasswordReset } from "@core/models/passwordReset";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,20 @@ export class AuthService {
   register(register: Register): Observable<Response>{
     return this.httpClient.post<Response>(this.api + 'auth/register', register)
   }
+
+  verifyEmail(token: string | null): Observable<Response>{
+    return this.httpClient.get<Response>(this.api + `verify-email?token=${token}`)
+  }
+
+
+  sendResetPassword(email: string): Observable<Response>{
+    return this.httpClient.get<Response>(this.api + `reset-password?email=${email}`)
+  }
+
+  resetPassword(passwordReset: PasswordReset): Observable<Response>{
+    return this.httpClient.post<Response>(this.api + 'reset-password', passwordReset)
+  }
+
 
   setToken(value: string, key: string) {
     this.storageService.clear(key)

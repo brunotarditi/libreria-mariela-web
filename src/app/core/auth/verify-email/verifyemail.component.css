@@ -1,0 +1,38 @@
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+mat-card-title {
+  font-size: 22px;
+  margin: 10px auto;
+  color: #202020;
+  text-align: center;
+}
+
+.text {
+  text-align: center;
+}
+
+.login-card {
+  max-width: 600px;
+  margin: 5px auto;
+  padding: 5px;
+  background-color: #FFF;
+  box-shadow: none;
+}
+
+.login_signup {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.link {
+  color:  var(--btn-color);
+  font-size: 12px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

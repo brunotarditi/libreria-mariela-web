@@ -1,0 +1,43 @@
+
+
+<mat-card class="login-card">
+  <mat-card-title>{{title}}</mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="authForm" (ngSubmit)="onLogin()">
+            <mat-form-field class="w100" appearance="fill">
+              <mat-label>Email</mat-label>
+                <input id="email" type="email" matInput formControlName="email" placeholder="Correo electrónico">
+                <mat-icon matSuffix>email</mat-icon>
+                @if (emailAuth.hasError('email') && !emailAuth.hasError('required')) {
+                  <mat-error>Ingresa un correo electrónico válido</mat-error>
+                }
+                @if (emailAuth!.hasError('required')  && emailAuth!.touched) {
+                  <mat-error>El email es requerido</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="w100" appearance="fill">
+                <mat-label>Contraseña</mat-label>
+                <input id="password" matInput formControlName="password" [type]="passwordVisibility['login']() ? 'password' : 'text'" placeholder="Contraseña" autocomplete="off" />
+                <button class="btn-password" matSuffix mat-icon-button type="button" (click)="onChangePasswordIcon('login', $event)">
+                  <mat-icon>{{passwordVisibility['login']() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                @if (passwordAuth!.hasError('required') && passwordAuth!.touched) {
+                  <mat-error>La contraseña es requerida</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="option_field link">
+              <a (click)="goPasswordReset()">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <button mat-flat-button class="btn-login" type="submit" [disabled]="authForm.invalid">
+              Iniciar sesión
+            </button>
+
+            <div class="login_signup">
+              ¿No tienes cuenta? <a (click)="goRegister()" class="link">Registrate</a>
+            </div>
+          </form>
+        </mat-card-content>
+</mat-card>

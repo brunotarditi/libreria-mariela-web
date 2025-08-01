@@ -12,6 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-suppliers',
@@ -37,9 +40,13 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
+  allowed_roles: string[] = ['ROOT', 'ADMIN' ,'WRITE'];
+
   private supplierService = inject(SupplierService);
+  private authService = inject(AuthService);
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   ngAfterViewInit() {
     if(this.dataSource && this.paginator && this.sort){
@@ -49,7 +56,7 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.getData()
+    this.getData();
   }
 
   getData(){
@@ -82,12 +89,29 @@ export class SuppliersComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: number) {
-    this.supplierService.deleteById(id).subscribe({
-      next: (res: any) => {
-        this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
-          this.getData()
-        },
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      width: '400px',
+      data: {
+        title: 'Eliminar proveedor',
+        message: "¿Estás seguro de eliminar este proveedor?"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.supplierService.deleteById(id).subscribe({
+          next: (res: any) => {
+            this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top')
+            this.getData()
+          },
+        })
+      }
     })
+  }
+
+  permission(){
+    const userRoles = this.authService.roles;
+    return this.allowed_roles.some(role => userRoles.includes(role));
   }
 
   goToDetail(){
