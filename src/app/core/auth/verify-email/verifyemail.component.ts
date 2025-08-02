@@ -31,12 +31,12 @@ export class VerifyEmailComponent implements OnInit {
       this.token = params.get('token');
     });
 
-    // if (this.isTokenFlow) {
-    //   this.authService.verifyEmail(this.token).subscribe({
-    //     next: () => this.message = '¡Email verificado con éxito!',
-    //     error: () => this.message = 'El enlace ya expiró o no es válido.',
-    //   });
-    // }
+    if (this.isTokenFlow) {
+      this.authService.verifyEmail(this.token).subscribe({
+        next: (res) => this.message = res.message!,
+        error: (err) => this.message = err.error.error,
+      });
+    }
   }
 
   get isTokenFlow() {
