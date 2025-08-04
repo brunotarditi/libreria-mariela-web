@@ -46,7 +46,7 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let row">
-        <button  mat-mini-fab color="primary" class="btn-action" matTooltip="Editar producto" matTooltipPosition="above" (click)="onUpdate(row.id)" [disabled]="!permission()">
+        <button  mat-mini-fab class="btn-action" matTooltip="Editar producto" matTooltipPosition="above" (click)="onUpdate(row.id)" [disabled]="!permission()">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-mini-fab class="btn-action" matTooltip="Eliminar producto" matTooltipPosition="above" (click)="onDelete(row.id)" [disabled]="!permission()">
