@@ -44,6 +44,7 @@ export class ProductComponent implements OnInit {
   message: string = '';
   categories: Category[] = [];
   brands: Brand[] = [];
+  id: number = 0;
 
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -96,20 +97,11 @@ export class ProductComponent implements OnInit {
     this.loadCategories();
     this.loadBrands();
     this.productId = this.route.snapshot.params['id'];
-    if (this.productId === 'create') {
-      this.productForm.setValue({
-        name: '',
-        code: '',
-        sku: '',
-        profitMargin: '',
-        description: '',
-        category: 0,
-        brand: 0
-      })
-    } else {
+    if (this.productId !== 'create') {
       if(this.productId){
         this.productService.getById(+this.productId).subscribe({
           next: (res) => {
+            this.id = res.ID
             this.productForm.setValue(
               {
                 name: res.name,
@@ -154,17 +146,29 @@ export class ProductComponent implements OnInit {
         category_id: this.category.value,
         brand_id: this.brand.value,
       };
+      if (this.id > 0) {
+        this.productService.update(this.id, product).subscribe({
+          next: (res) => {
+            this.snackBarService.showSnackBar(`Se actualizó con éxito el producto ${res.name.toLowerCase()}`, 'success-snackbar', 3000, 'end', 'top')
+          },
+          complete: () => {
+            this.productForm.reset();
+            this.goBack();
+          }
+        })
+      }else{
+        this.productService.save(product).subscribe({
+          next: () => {
+            this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top')
+          },
+          complete: () => {
+            this.productForm.reset();
+            this.goBack();
+          }
+        });
+      }
 
-      this.productService.save(product).subscribe({
-        next: () => {
-          this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top')
-          this.productForm.reset();
-          this.router.navigate(['/products'])
-        },
-        error: () => {
-          this.snackBarService.showSnackBar('Error al crear el producto', 'error-snackbar', 3000, 'end', 'top')
-        },
-      });
+
     }
   }
 
