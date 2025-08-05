@@ -40,10 +40,16 @@
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell no-data" colspan="2">
         <div class="no-data-container">
-          <mat-icon>search_off</mat-icon>
-          <span>
-            {{ input.value ? 'No se encontraron resultados para "' + input.value + '"' : 'No hay datos disponibles' }}
-          </span>
+          @if(isLoading){
+            <mat-spinner diameter="40"></mat-spinner>
+          }
+
+          @if(!isLoading){
+            <mat-icon>search_off</mat-icon>
+            <span>
+              {{ input.value ? 'No se encontraron resultados para "' + input.value + '"' : 'No hay datos disponibles' }}
+            </span>
+          }
         </div>
       </td>
     </tr>

@@ -31,6 +31,10 @@
   --tran-02: all 0.2s ease;
 }
 
+@include mat.progress-spinner-overrides((
+    active-indicator-color:  var(--primary-color),
+  ));
+
 @include mat.button-overrides((
     filled-container-color: var(--primary-color),
 ));

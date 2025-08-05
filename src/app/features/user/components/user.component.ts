@@ -19,6 +19,7 @@ import { FieldControlConfig } from '@shared/models/dialog';
 import { Validators } from '@angular/forms';
 import { Option } from '../../../shared/models/option';
 import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -37,11 +38,12 @@ import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog
     MatButtonModule,
     MatTooltipModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
     TitleComponent
   ],
 })
 export class UserComponent {
-
+  isLoading: boolean = true;
   displayedColumns: string[] = ['user_name', 'created_at', 'is_active', 'last_login', 'roles', 'actions'];
   dataSource: MatTableDataSource<User> = new MatTableDataSource<User>([]);
 
@@ -84,8 +86,8 @@ export class UserComponent {
           this.dataSource.sort = this.sort;
         }
       },
-      error: (err) => console.error(err)
-    })
+    });
+    this.isLoading = false;
   }
 
   applyFilter(event: Event) {

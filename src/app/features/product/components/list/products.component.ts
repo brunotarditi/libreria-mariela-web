@@ -13,6 +13,7 @@ import { SnackBarService } from '@shared/services/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
 import { AuthService } from '@core/services/auth.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-products',
@@ -26,10 +27,12 @@ import { AuthService } from '@core/services/auth.service';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     TitleComponent,
   ],
 })
 export class ProductsComponent implements OnInit, AfterViewInit {
+  isLoading: boolean = true;
   displayedColumns: string[] = ['code', 'name', 'profit_margin', 'description', 'brand_name', 'category_name', 'actions'];
   dataSource: MatTableDataSource<ProductData> = new MatTableDataSource<ProductData>([]);
 
@@ -67,8 +70,8 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
         }
       },
-      error: (err) => console.error(err)
-    })
+    });
+    this.isLoading = false;
   }
 
   applyFilter(event: Event) {

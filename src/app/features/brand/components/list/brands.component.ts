@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
 import { AuthService } from '@core/services/auth.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-brands',
@@ -31,11 +32,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     CommonModule,
     TitleComponent
   ],
 })
 export class BrandsComponent implements OnInit, AfterViewInit {
+  isLoading: boolean = true;
   displayedColumns: string[] = ['name', 'actions'];
   dataSource: MatTableDataSource<Brand> = new MatTableDataSource<Brand>([]);
 
@@ -62,18 +65,19 @@ export class BrandsComponent implements OnInit, AfterViewInit {
   }
 
   getData(){
-    this.brandService.getAll().subscribe({
-      next: (res) => {
-        this.dataSource = new MatTableDataSource<Brand>(res)
-        this.dataSource.filterPredicate = (data: Brand, filter: string) => {
-          return data.name.trim().toLowerCase().indexOf(filter) !== -1
-        }
-        if (this.dataSource && this.paginator && this.sort) {
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        }
-      },
-    })
+      this.brandService.getAll().subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource<Brand>(res)
+          this.dataSource.filterPredicate = (data: Brand, filter: string) => {
+            return data.name.trim().toLowerCase().indexOf(filter) !== -1
+          }
+          if (this.dataSource && this.paginator && this.sort) {
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        },
+      });
+      this.isLoading = false;
   }
 
   applyFilter(event: Event) {

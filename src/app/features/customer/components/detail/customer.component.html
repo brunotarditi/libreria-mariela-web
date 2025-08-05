@@ -43,7 +43,7 @@
 
               <mat-form-field class="w100" appearance="fill">
                 <mat-label>Información de Contacto</mat-label>
-                <input type="text" matInput formControlName="contact_info" placeholder="Ej. correo@ejemplo.com">
+                <input type="text" matInput formControlName="contact_info" placeholder="Ej. correo o teléfono">
                 @if(customer.get('contact_info')?.hasError('required') && customer.get('contact_info')?.touched) {
                   <mat-error>
                     El contacto es <strong>requerido</strong>

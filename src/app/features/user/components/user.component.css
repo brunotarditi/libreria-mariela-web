@@ -101,3 +101,66 @@
 .form {
   padding: 16px;
 }
+
+
+@media screen and (max-width: 1000px) {
+  .mat-mdc-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .mat-elevation-z8 {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mdc-data-table__header-row {
+    display: table-row;
+  }
+
+  .mdc-data-table__row {
+    display: table-row;
+  }
+
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding: 6px;
+    font-size: 12px;
+    min-height: 36px;
+  }
+
+  .header-grid {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .mat-mdc-paginator {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+
+  .mat-mdc-mini-fab {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  .btn-action mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  .no-data-container {
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+  }
+}

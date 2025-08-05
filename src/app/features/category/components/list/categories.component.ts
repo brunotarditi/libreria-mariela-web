@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
 import { AuthService } from '@core/services/auth.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-categories',
@@ -29,11 +30,13 @@ import { AuthService } from '@core/services/auth.service';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     CommonModule,
     TitleComponent
   ],
 })
 export class CategoriesComponent implements OnInit, AfterViewInit {
+  isLoading: boolean = true;
   displayedColumns: string[] = ['name', 'actions'];
   dataSource: MatTableDataSource<Category> = new MatTableDataSource<Category>([]);
 
@@ -75,7 +78,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
         }
       },
-    })
+    });
+    this.isLoading = false;
   }
 
   applyFilter(event: Event) {
