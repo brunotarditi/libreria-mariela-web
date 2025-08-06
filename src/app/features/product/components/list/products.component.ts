@@ -69,9 +69,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }
+        this.isLoading = false;
       },
     });
-    this.isLoading = false;
   }
 
   applyFilter(event: Event) {
