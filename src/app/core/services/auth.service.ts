@@ -1,7 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Login } from "@core/models/login";
-import { Tokens } from "@core/models/token";
 import { Observable } from "rxjs";
 import { environment } from "@environments/environment";
 import { StorageService } from "@shared/services/storage.service";
@@ -19,10 +17,6 @@ export class AuthService {
   private api = environment.api;
   private httpClient = inject(HttpClient);
   private storageService = inject(StorageService);
-
-  login(login: Login): Observable<Tokens>{
-    return this.httpClient.post<Tokens>(this.api + 'auth/login', login)
-  }
 
   register(register: Register): Observable<Response>{
     return this.httpClient.post<Response>(this.api + 'auth/register', register)
@@ -66,11 +60,18 @@ export class AuthService {
 
 
   getRoles(): void {
-    const token = this.storageService.get(INFO);
+    const token = this.storageService.get(ACCESS_TOKEN);
     if (token) {
-      const info = atob(token);
-      const values = JSON.parse(info);
-      this.roles = values;
+      try {
+        const payloadBase64Url = token.split('.')[1];
+        const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(atob(payloadBase64));
+        this.roles = payload.roles || [];
+      } catch (e) {
+        this.roles = [];
+      }
+    } else {
+      this.roles = [];
     }
   }
 

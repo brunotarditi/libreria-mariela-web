@@ -104,6 +104,10 @@ export const routes: Routes = [
         loadComponent: () => import('./core/auth/login/login.component').then(c => c.LoginComponent),
       },
       {
+        path: 'callback',
+        loadComponent: () => import('./core/auth/callback/auth-callback.component').then(c => c.AuthCallbackComponent),
+      },
+      {
         path: 'register',
         loadComponent: () => import('./core/auth/register/register.component').then(c => c.RegisterComponent),
       },
