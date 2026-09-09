@@ -1,7 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from '@core/auth/login/login.component';
-import { PasswordResetComponent } from '@core/auth/password-reset/passwordreset.component';
-import { RegisterComponent } from '@core/auth/register/register.component';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { RoleGuard } from '@core/guards/role.guard';
 import { LayoutComponent } from '@core/layout/layout/layout.component';
@@ -106,23 +103,7 @@ export const routes: Routes = [
       {
         path: 'callback',
         loadComponent: () => import('./core/auth/callback/auth-callback.component').then(c => c.AuthCallbackComponent),
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./core/auth/register/register.component').then(c => c.RegisterComponent),
-      },
-      {
-        path: 'reset-password',
-        loadComponent: () => import('./core/auth/password-reset/passwordreset.component').then(c => c.PasswordResetComponent),
-      },
-      {
-        path: 'reset-password/:token',
-        loadComponent: () => import('./core/auth/password-reset/passwordreset.component').then(c => c.PasswordResetComponent),
-      },
-      {
-        path: 'verify-email/:token',
-        loadComponent: () => import('./core/auth/verify-email/verifyemail.component').then(c => c.VerifyEmailComponent),
-      },
+      }
     ]
   },
 

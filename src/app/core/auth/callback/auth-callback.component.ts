@@ -4,12 +4,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ACCESS_TOKEN } from '@core/constants/constants';
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
-
-interface TokenResponse {
-  access_token: string;
-  token_type?: string;
-  expires_in?: number;
-}
+import { TokenResponse } from '@core/models/login';
 
 @Component({
   selector: 'app-auth-callback',
