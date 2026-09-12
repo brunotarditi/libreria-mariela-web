@@ -2,7 +2,6 @@ import { inject, Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import { StorageService } from "@shared/services/storage.service";
 import { ACCESS_TOKEN } from "@core/constants/constants";
-import { PeakAuthClient } from "@brunotarditi/peak-auth";
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +10,13 @@ export class AuthService {
 
   roles: string[] = []
   private storageService = inject(StorageService);
-  private peakAuthClient = new PeakAuthClient({
-    issuerUrl: environment.peakAuthUrl,
-    clientId: environment.peakAuthClientId,
-  });
 
-  async loginWithPeakAuth(): Promise<void> {
+  loginWithPeakAuth(): void {
     const redirectUri = `${window.location.origin}/auth/callback`;
     const state = crypto.randomUUID();
     sessionStorage.setItem('oauth_state', state);
 
-    const pkce = await this.peakAuthClient.generatePKCE();
-    sessionStorage.setItem('oauth_code_verifier', pkce.codeVerifier);
-
-    const loginUrl = this.peakAuthClient.getAuthorizationUrl({
-      redirectUri,
-      state,
-      codeChallenge: pkce.codeChallenge,
-    });
+    const loginUrl = `${environment.peakAuthUrl}/oauth/authorize?client_id=${encodeURIComponent(environment.peakAuthClientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&state=${encodeURIComponent(state)}`;
 
     window.location.href = loginUrl;
   }
