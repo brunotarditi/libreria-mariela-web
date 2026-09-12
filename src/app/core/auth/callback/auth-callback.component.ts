@@ -24,7 +24,11 @@ export class AuthCallbackComponent implements OnInit {
     sessionStorage.removeItem('oauth_state');
 
     if (code && state && savedState && state === savedState) {
-      this.http.post<TokenResponse>(`${environment.api}auth/exchange`, { code }).subscribe({
+      const code_verifier = sessionStorage.getItem('oauth_code_verifier');
+      const redirect_uri = `${window.location.origin}/auth/callback`;
+      sessionStorage.removeItem('oauth_code_verifier');
+
+      this.http.post<TokenResponse>(`${environment.api}auth/exchange`, { code, code_verifier, redirect_uri }).subscribe({
         next: (res: TokenResponse) => {
           this.authService.setToken(res.access_token, ACCESS_TOKEN);
           this.router.navigate(['/dashboard']);
