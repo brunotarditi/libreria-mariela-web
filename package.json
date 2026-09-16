@@ -39,5 +39,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~6.0.2"
+  },
+  "overrides": {
+    "proxy-addr": "2.0.8"
   }
 }
