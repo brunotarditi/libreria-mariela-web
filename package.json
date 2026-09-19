@@ -41,6 +41,7 @@
     "typescript": "~6.0.2"
   },
   "overrides": {
-    "proxy-addr": "2.0.8"
+    "proxy-addr": "2.0.8",
+    "raw-body": "4.0.0"
   }
 }
