@@ -116,13 +116,12 @@
 
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Descripción</mat-label>
-          <textarea matInput formControlName="description" placeholder="Ej. Lapicera de color azul">
-            @if(description.hasError('maxlength') && description.touched) {
-              <mat-error>
-                La descripción excede los <strong>150 caracteres</strong>
-              </mat-error>
-            }
-          </textarea>
+          <textarea matInput formControlName="description" placeholder="Ej. Lapicera de color azul"></textarea>
+          @if(description.hasError('maxlength') && description.touched) {
+            <mat-error>
+              La descripción excede los <strong>150 caracteres</strong>
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-card-actions>

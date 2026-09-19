@@ -13,8 +13,8 @@
   <ul class="logout-mode" [class.closed]="isClosed()">
     <li>
       <a routerLink="/auth" (click)="logOut()">
-        <mat-icon  [matTooltip]="isClosed() ? 'Cerrar sesión' : ''">home</mat-icon>
-        <span class="link-name" >Logout</span>
+        <mat-icon [matTooltip]="isClosed() ? 'Cerrar sesión' : ''">logout</mat-icon>
+        <span class="link-name">Logout</span>
       </a>
     </li>
     <li class="mode">

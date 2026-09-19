@@ -206,7 +206,7 @@ export class ProductComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       data: {
-        title: 'Crea tu categoría',
+        title: 'Crea tu marca',
         fields: [
           { name: 'name', label: 'Nombre', type: 'text', validators: [Validators.required] },
         ] as FieldControlConfig[]

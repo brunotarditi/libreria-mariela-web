@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
       title: 'Crear productos',
       description: 'Agrega nuevos productos al inventario con nombre, código, categoría y marca.',
       buttonText: 'Crear Producto',
-      route: '/products/new'
+      route: '/products/detail/create'
     },
     {
       icon: 'category',
