@@ -35,6 +35,10 @@
     active-indicator-color:  var(--primary-color),
   ));
 
+@include mat.progress-bar-overrides((
+    active-indicator-color:  var(--primary-color),
+  ));
+
 @include mat.button-overrides((
     filled-container-color: var(--primary-color),
 ));

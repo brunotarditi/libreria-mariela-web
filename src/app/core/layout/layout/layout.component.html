@@ -3,6 +3,9 @@
 
 <!-- Dashboard -->
 <section class="dashboard" [ngClass]="{'sidebar-closed': !isOpen}">
+  @if (loadingService.isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="global-progress-bar"></mat-progress-bar>
+  }
   <!-- header -->
   <app-header (toggleSidebar)="toggle($event)"></app-header>
   <!-- content -->

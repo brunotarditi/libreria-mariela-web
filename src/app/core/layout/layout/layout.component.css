@@ -13,6 +13,15 @@
   width: calc(100% - 78px);
 }
 
+.global-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 1100;
+}
+
 
 @media (max-width: 1000px) {
   .dashboard,
