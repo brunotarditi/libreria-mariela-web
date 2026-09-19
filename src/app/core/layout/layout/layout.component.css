@@ -15,16 +15,11 @@
 
 
 @media (max-width: 1000px) {
-  .dashboard {
+  .dashboard,
+  .dashboard.sidebar-closed {
     left: 78px;
     width: calc(100% - 78px);
   }
-
-  .dashboard.sidebar-closed {
-    left: 250px;
-    width: calc(100% - 250px);
-  }
-
 }
 
 @media (max-width: 500px) {
@@ -32,6 +27,6 @@
   .dashboard.sidebar-closed {
     left: 78px;
     width: calc(100% - 78px);
+    padding: 10px 8px;
   }
-
 }

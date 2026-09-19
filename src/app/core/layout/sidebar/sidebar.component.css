@@ -48,62 +48,12 @@ nav.close .brand-name {
 
 @media (max-width: 1000px) {
   nav {
-    width: 78px;
-  }
-
-  nav.close {
-    width: 250px;
-  }
-
-  nav .brand-name {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  nav.close .brand-name {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  nav li a .link-name {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  nav.close li a .link-name {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-}
-
-@media (max-width: 500px) {
-
-  nav {
-    width: 78px;
+    z-index: 1000;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
   }
 
   nav.close {
     width: 78px;
-  }
-
-  nav .brand-name {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  nav.close .brand-name {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  nav li a .link-name {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  nav.close li a .link-name {
-    opacity: 0;
-    pointer-events: none;
+    box-shadow: none;
   }
 }

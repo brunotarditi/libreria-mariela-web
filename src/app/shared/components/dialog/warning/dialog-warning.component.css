@@ -16,13 +16,13 @@
 }
 
 .btn-dialog-save:hover {
-  background-color: #7181c3;
+  filter: brightness(0.9);
 }
 
 .btn-dialog-save:disabled {
   color: #dfdfdf;
-  opacity: 0.8;
-  background-color: #a3b1d8;
+  opacity: 0.6;
+  background-color: #888;
 }
 
 .message{
