@@ -1,0 +1,117 @@
+.not-found-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: var(--panel-color);
+}
+
+.not-found-card {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  padding: 48px 32px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--panel-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(35, 155, 167, 0.1);
+  margin-bottom: 20px;
+}
+
+.not-found-icon {
+  font-size: 44px;
+  width: 44px;
+  height: 44px;
+  color: var(--primary-color);
+}
+
+.error-code {
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary-color);
+  margin: 0;
+  letter-spacing: -2px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 12px 0 8px 0;
+}
+
+.description {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  opacity: 0.75;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+  padding: 0 24px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.btn-secondary {
+  border-color: var(--border-color) !important;
+  color: var(--text-color) !important;
+  padding: 0 20px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.btn-secondary mat-icon,
+.btn-primary mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 500px) {
+  .not-found-card {
+    padding: 32px 20px;
+  }
+
+  .error-code {
+    font-size: 3.8rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}

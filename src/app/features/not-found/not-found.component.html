@@ -1,0 +1,30 @@
+<div class="not-found-container">
+  <div class="not-found-card">
+    <div class="icon-wrapper">
+      <mat-icon class="not-found-icon">travel_explore</mat-icon>
+    </div>
+    <h1 class="error-code">404</h1>
+    <h2 class="title">Página no encontrada</h2>
+    <p class="description">
+      Lo sentimos, la página que buscas no existe o ha sido movida a otra dirección.
+    </p>
+
+    <div class="actions">
+      @if (isLogged) {
+        <a mat-flat-button class="btn-primary" routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          Volver al Dashboard
+        </a>
+      } @else {
+        <a mat-flat-button class="btn-primary" routerLink="/home">
+          <mat-icon>home</mat-icon>
+          Volver al Inicio
+        </a>
+      }
+      <a mat-stroked-button class="btn-secondary" routerLink="/home">
+        <mat-icon>store</mat-icon>
+        Portal Principal
+      </a>
+    </div>
+  </div>
+</div>
