@@ -4,7 +4,7 @@
 
 .btn-action {
   color: #fff;
-  background-color:  var(--btn-color);
+  background-color: var(--btn-color);
   margin: 0px 5px;
 }
 
@@ -14,12 +14,12 @@
   transition: var(--tran-02);
 }
 
-.search{
+.search {
   width: 350px;
   padding: 5px;
 }
 
-.header-grid{
+.header-grid {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,10 +29,10 @@
 .no-data-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 16px;
   color: #757575;
-  justify-content: center;
   font-size: 18px;
 }
 
@@ -101,5 +101,3 @@
     text-align: center;
   }
 }
-
-
