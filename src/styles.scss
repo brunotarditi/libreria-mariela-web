@@ -1,5 +1,21 @@
 @use '@angular/material' as mat;
 
+$theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$cyan-palette,
+    tertiary: mat.$azure-palette,
+  ),
+  typography: (
+    brand-family: 'Poppins',
+    plain-family: 'Poppins',
+  ),
+));
+
+html {
+  @include mat.all-component-themes($theme);
+}
+
 /* === BASE STYLES === */
 * {
   margin: 0;
