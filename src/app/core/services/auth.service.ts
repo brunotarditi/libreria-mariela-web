@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal, computed } from "@angular/core";
 import { environment } from "@environments/environment";
 import { StorageService } from "@shared/services/storage.service";
 import { ACCESS_TOKEN } from "@core/constants/constants";
@@ -9,12 +9,16 @@ import { PeakAuthClient } from "@brunotarditi/peak-auth";
 })
 export class AuthService {
 
-  roles: string[] = []
   private storageService = inject(StorageService);
   private peakAuthClient = new PeakAuthClient({
     issuerUrl: environment.peakAuthUrl,
     clientId: environment.peakAuthClientId,
   });
+
+  // Reactive roles signal
+  private rolesSignal = signal<string[]>(this.parseRolesFromToken());
+  readonly roles = this.rolesSignal.asReadonly();
+  readonly isRootSignal = computed(() => this.roles().includes('ROOT'));
 
   async loginWithPeakAuth(): Promise<void> {
     const redirectUri = `${window.location.origin}/auth/callback`;
@@ -33,48 +37,55 @@ export class AuthService {
     window.location.href = loginUrl;
   }
 
-
-  setToken(value: string, key: string) {
-    this.storageService.clear(key)
+  setToken(value: string, key: string): void {
+    this.storageService.clear(key);
     this.storageService.set(key, value);
-  }
-
-
-  hasAnyRole(requiredRoles: string[]): boolean {
-    return requiredRoles.some(role => this.roles.includes(role));
-  }
-
-  isLogged(): boolean {
-    if (this.storageService.get(ACCESS_TOKEN)) {
-        return true;
-    } else {
-        return false;
+    if (key === ACCESS_TOKEN) {
+      this.rolesSignal.set(this.parseRolesFromToken());
     }
   }
 
-  isRoot(): boolean{
-    return this.roles.indexOf('ROOT') > -1
+  hasAnyRole(requiredRoles: string[]): boolean {
+    const currentRoles = this.roles();
+    return requiredRoles.some(role => currentRoles.includes(role));
   }
 
+  isLogged(): boolean {
+    return !!this.storageService.get(ACCESS_TOKEN);
+  }
 
-  getRoles(): void {
+  isRoot(): boolean {
+    return this.roles().includes('ROOT');
+  }
+
+  getRoles(): string[] {
+    return this.roles();
+  }
+
+  refreshRoles(): void {
+    this.rolesSignal.set(this.parseRolesFromToken());
+  }
+
+  private parseRolesFromToken(): string[] {
     const token = this.storageService.get(ACCESS_TOKEN);
-    if (token) {
-      try {
-        const payloadBase64Url = token.split('.')[1];
-        const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(atob(payloadBase64));
-        this.roles = payload.roles || [];
-      } catch (e) {
-        this.roles = [];
-      }
-    } else {
-      this.roles = [];
+    if (!token || typeof token !== 'string') {
+      return [];
+    }
+    try {
+      const parts = token.split('.');
+      if (parts.length < 2) return [];
+      const payloadBase64Url = parts[1];
+      const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(payloadBase64));
+      return Array.isArray(payload.roles) ? payload.roles : [];
+    } catch {
+      return [];
     }
   }
 
   logOut(): void {
-    this.storageService.clear(ACCESS_TOKEN)
+    this.storageService.clear(ACCESS_TOKEN);
+    this.rolesSignal.set([]);
     const redirectUri = encodeURIComponent(`${window.location.origin}/auth/login`);
     window.location.href = `${environment.peakAuthUrl}/oauth/logout?redirect_uri=${redirectUri}`;
   }

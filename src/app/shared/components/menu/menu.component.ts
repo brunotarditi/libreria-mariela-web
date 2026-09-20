@@ -28,13 +28,13 @@ export class MenuComponent {
     if (!this.listItems()) {
       return [];
     }
-    const userRoles = this.authService.roles;
+    const userRoles = this.authService.roles();
     return this.listItems()?.filter(item => {
       if (!item.allowedRoles || item.allowedRoles.length === 0) {
-          return true;
-        }
-        return item.allowedRoles.some(role => userRoles.includes(role));
-    })
+        return true;
+      }
+      return item.allowedRoles.some(role => userRoles.includes(role));
+    });
 
   });
 

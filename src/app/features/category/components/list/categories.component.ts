@@ -117,9 +117,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  permission(){
-    const userRoles = this.authService.roles;
-    return this.allowed_roles.some(role => userRoles.includes(role));
+  permission(): boolean {
+    return this.authService.hasAnyRole(this.allowed_roles);
   }
 
   goToDetail(){
