@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CategoryService } from '@features/category/services/category.service';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +24,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
     TitleComponent
@@ -34,6 +36,7 @@ export class CategoryComponent implements OnInit {
   categoryId: string | null = null;
   hasExist: boolean = false;
   id: number = 0;
+  isSubmitting = signal<boolean>(false);
 
   private categoryService = inject(CategoryService);
   private formBuilder = inject(FormBuilder);
@@ -84,49 +87,69 @@ export class CategoryComponent implements OnInit {
   }
 
   onSubmit(){
+    if (this.categoryForm.invalid || this.isSubmitting()) {
+      return;
+    }
+    this.isSubmitting.set(true);
+
     if (this.categories.length === 1) {
       const category: Category = {
           ID: this.id || 0,
           name: this.categories.value[0]
-      }
+      };
       if (this.id > 0) {
         this.categoryService.update(this.id, category).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se actualizó con éxito la categoría ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se actualizó con éxito la categoría ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al actualizar la categoría: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }else{
         this.categoryService.save(category).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se guardó con éxito la categoría ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se guardó con éxito la categoría ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al guardar la categoría: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }
 
     }else{
-      let categories: Category[] = []
+      let categories: Category[] = [];
 
       this.categories.value.forEach((item: string) => {
-        categories.push({ID: 0, name: item})
+        categories.push({ID: 0, name: item});
       });
 
       this.categoryService.saveMany(categories).subscribe({
         next: () => {
-          this.snackBarService.showSnackBar(`Se guardaron con éxito las categorías`, 'success-snackbar', 3000, 'end', 'top')
+          this.snackBarService.showSnackBar(`Se guardaron con éxito las categorías`, 'success-snackbar', 3000, 'end', 'top');
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.snackBarService.showSnackBar(`Error al guardar las categorías: ${err}`, 'error-snackbar', 3000, 'end', 'top');
         },
         complete: () => {
+          this.isSubmitting.set(false);
           this.resetForm();
           this.goBack();
         }
-      })
+      });
     }
   }
 

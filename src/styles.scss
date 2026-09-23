@@ -90,11 +90,26 @@ html {
   }
 }
 
-.btn-save:disabled {
-  color: var(--btn-disabled-color) !important;
-  background-color: var(--btn-disabled-bg) !important;
-  cursor: not-allowed !important;
-  opacity: 0.7 !important;
+.btn-save {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+
+  .btn-spinner {
+    display: inline-block;
+    --mdc-circular-progress-active-indicator-color: currentColor;
+    circle {
+      stroke: currentColor !important;
+    }
+  }
+
+  &:disabled {
+    color: var(--btn-disabled-color) !important;
+    background-color: var(--btn-disabled-bg) !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+  }
 }
 
 @include mat.form-field-overrides((
@@ -379,4 +394,31 @@ body.dark {
     subhead-color: #FFF
 ));
 
+}
+
+/* === SIDEBAR DROPDOWN MENU === */
+.sidebar-dropdown-menu {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+
+  .dropdown-header {
+    padding: 8px 16px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 4px;
+  }
+
+  .active-menu-item {
+    background-color: var(--badge-edit-bg) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+
+    mat-icon {
+      color: var(--primary-color) !important;
+    }
+  }
 }

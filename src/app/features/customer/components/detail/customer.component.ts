@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CustomerService } from '@features/customer/services/customer.service';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +24,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
     TitleComponent
@@ -34,6 +36,7 @@ export class CustomerComponent implements OnInit {
   customerId: string | null = null;
   hasExist: boolean = false;
   id: number = 0;
+  isSubmitting = signal<boolean>(false);
 
   private customerService = inject(CustomerService);
   private formBuilder = inject(FormBuilder);
@@ -94,6 +97,11 @@ export class CustomerComponent implements OnInit {
   }
 
   onSubmit(){
+    if (this.customerForm.invalid || this.isSubmitting()) {
+      return;
+    }
+    this.isSubmitting.set(true);
+
     if (this.customers.length === 1) {
       const customer: Customer = {
           ID: this.id || 0,
@@ -101,26 +109,35 @@ export class CustomerComponent implements OnInit {
           contact_info: this.customers.value[0].contact_info,
       };
       if (this.id > 0) {
-
         this.customerService.update(this.id, customer).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se actualizó con éxito el cliente ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se actualizó con éxito el cliente ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al actualizar el cliente: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }else{
         this.customerService.save(customer).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se guardó con éxito el cliente ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se guardó con éxito el cliente ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al guardar el cliente: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }
 
     }else{
@@ -132,13 +149,18 @@ export class CustomerComponent implements OnInit {
 
       this.customerService.saveMany(customers).subscribe({
         next: () => {
-          this.snackBarService.showSnackBar(`Se guardaron con éxito los clientes`, 'success-snackbar', 3000, 'end', 'top')
+          this.snackBarService.showSnackBar(`Se guardaron con éxito los clientes`, 'success-snackbar', 3000, 'end', 'top');
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.snackBarService.showSnackBar(`Error al guardar los clientes: ${err}`, 'error-snackbar', 3000, 'end', 'top');
         },
         complete: () => {
+          this.isSubmitting.set(false);
           this.resetForm();
           this.goBack();
         }
-      })
+      });
     }
   }
 

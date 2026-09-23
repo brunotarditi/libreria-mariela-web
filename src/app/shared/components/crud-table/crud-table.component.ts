@@ -104,6 +104,14 @@ export class CrudTableComponent<T = any> {
     }
   }
 
+  clearFilter(input: HTMLInputElement): void {
+    input.value = '';
+    this.dataSource.filter = '';
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   onCreate(): void {
     if (this.createRoute()) {
       this.router.navigate([this.createRoute()]);
@@ -122,12 +130,15 @@ export class CrudTableComponent<T = any> {
   }
 
   onDelete(row: any): void {
-    const name = this.entityName();
+    const entity = this.entityName();
+    const itemName = row.name || row.title || row.code || '';
     const dialogRef = this.dialog.open(DialogWarningComponent, {
-      width: '400px',
+      width: '420px',
       data: {
-        title: `Eliminar ${name}`,
-        message: `¿Estás seguro de eliminar este/a ${name}?`
+        title: `Eliminar ${entity}`,
+        itemName: itemName,
+        message: `¿Estás seguro de que deseas eliminar este/a ${entity}?`,
+        isDestructive: true
       }
     });
 

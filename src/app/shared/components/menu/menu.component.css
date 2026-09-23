@@ -18,6 +18,22 @@
   position: relative;
 }
 
+.nav-links {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 200px);
+  padding-right: 2px;
+}
+
+.nav-links::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav-links::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
 .nav-links li a:hover:before {
   content: "";
   position: absolute;
@@ -37,6 +53,99 @@
 .nav-links li a.active-link .link-name {
   color: var(--navlink-color);
   font-weight: 500;
+}
+
+/* === SUBMENU STYLES === */
+.submenu-toggle {
+  cursor: pointer;
+  width: 100%;
+}
+
+.arrow-icon {
+  margin-left: auto !important;
+  margin-right: 14px !important;
+  font-size: 20px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  color: var(--text-secondary) !important;
+  transition: transform var(--tran-03);
+}
+
+.has-submenu.expanded .arrow-icon {
+  transform: rotate(180deg);
+}
+
+.has-submenu.active-parent > .submenu-toggle mat-icon:not(.arrow-icon),
+.has-submenu.active-parent > .submenu-toggle .link-name {
+  color: var(--navlink-color);
+  font-weight: 500;
+}
+
+.submenu-list {
+  list-style: none;
+  padding: 4px 0 6px 0;
+  margin: 0 0 6px 24px;
+  border-left: 2px solid var(--border-color);
+  animation: submenuFadeIn 0.25s ease-out;
+}
+
+@keyframes submenuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.submenu-item a {
+  display: flex;
+  height: 44px !important;
+  align-items: center;
+  text-decoration: none;
+  padding-left: 12px;
+  border-radius: 8px;
+  margin: 2px 4px;
+  transition: var(--tran-02);
+}
+
+.submenu-item a:hover:before {
+  display: none !important;
+}
+
+.submenu-item a:hover {
+  background-color: var(--surface-hover);
+}
+
+.submenu-item a .sub-icon {
+  font-size: 20px !important;
+  min-width: 32px !important;
+  height: 24px !important;
+  color: var(--text-secondary);
+}
+
+.submenu-item a .sub-link-name {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: var(--tran-02);
+}
+
+.submenu-item a:hover .sub-icon,
+.submenu-item a:hover .sub-link-name {
+  color: var(--navlink-color);
+}
+
+.submenu-item a.active-sub-link {
+  background-color: var(--badge-edit-bg);
+}
+
+.submenu-item a.active-sub-link .sub-icon,
+.submenu-item a.active-sub-link .sub-link-name {
+  color: var(--navlink-color);
+  font-weight: 600;
 }
 
 .menu-items li a mat-icon {

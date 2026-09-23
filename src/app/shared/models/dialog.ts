@@ -4,6 +4,8 @@ import { Option } from "./option";
 export interface DialogWarningData {
   title: string;
   message?: string;
+  itemName?: string;
+  isDestructive?: boolean;
 }
 
 export interface DialogFormData {

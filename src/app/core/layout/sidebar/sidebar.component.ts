@@ -46,20 +46,27 @@ export class SidebarComponent implements OnInit {
     {
       name: 'Productos',
       icon: 'store',
-      route: '/products',
-      allowedRoles: ALLOWED_ROLES
-    },
-    {
-      name: 'Marcas',
-      icon: 'local_offer',
-      route: '/brands',
-      allowedRoles: ALLOWED_ROLES
-    },
-    {
-      name: 'Categorias',
-      icon: 'category',
-      route: '/categories',
-      allowedRoles: ALLOWED_ROLES
+      allowedRoles: ALLOWED_ROLES,
+      children: [
+        {
+          name: 'Listado',
+          icon: 'inventory_2',
+          route: '/products',
+          allowedRoles: ALLOWED_ROLES
+        },
+        {
+          name: 'Marcas',
+          icon: 'local_offer',
+          route: '/brands',
+          allowedRoles: ALLOWED_ROLES
+        },
+        {
+          name: 'Categorías',
+          icon: 'category',
+          route: '/categories',
+          allowedRoles: ALLOWED_ROLES
+        },
+      ]
     },
     {
       name: 'Proveedores',

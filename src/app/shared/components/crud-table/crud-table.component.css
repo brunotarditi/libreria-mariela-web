@@ -52,18 +52,113 @@
   box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.25) !important;
 }
 
-.no-data-container {
+/* Empty State */
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 44px 20px;
+  text-align: center;
+}
+
+.empty-state-badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  background-color: var(--badge-edit-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px;
-  color: var(--text-secondary);
-  font-size: 18px;
+  margin-bottom: 16px;
 }
 
-.no-data-container mat-icon {
+.empty-state-badge mat-icon {
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+  color: var(--primary-color);
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 6px 0;
+}
+
+.empty-state-subtitle {
+  font-size: 0.95rem;
   color: var(--text-secondary);
+  max-width: 440px;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.btn-empty-cta {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0 22px !important;
+  height: 42px !important;
+  font-weight: 500 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-empty-cta:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* No data search */
+.no-data-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.no-data-search .no-data-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.no-data-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 4px 0;
+}
+
+.no-data-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 14px 0;
+}
+
+.btn-clear-search {
+  color: var(--primary-color) !important;
+  font-weight: 500 !important;
+}
+
+.no-data-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
 }
 
 @media screen and (max-width: 1000px) {

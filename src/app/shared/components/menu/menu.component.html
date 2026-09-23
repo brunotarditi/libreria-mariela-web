@@ -1,12 +1,51 @@
 <div class="menu-items">
   <ul class="nav-links" [class.closed]="isClosed()">
     @for (item of filterItems(); track item.name) {
-      <li>
-        <a [routerLink]="item.route" routerLinkActive="active-link">
-          <mat-icon [matTooltip]="isClosed() ? item.name : ''">{{item.icon}}</mat-icon>
-          <span class="link-name">{{item.name}}</span>
-        </a>
-      </li>
+      @if (item.children && item.children.length > 0) {
+        <li class="nav-item has-submenu" [class.expanded]="isExpanded(item)" [class.active-parent]="isParentActive(item)">
+          <a
+            (click)="toggleExpand(item, $event)"
+            [matMenuTriggerFor]="isClosed() ? submenu : null"
+            class="submenu-toggle"
+            [class.active-link]="isParentActive(item)">
+            <mat-icon [matTooltip]="isClosed() ? item.name : ''">{{item.icon}}</mat-icon>
+            <span class="link-name">{{item.name}}</span>
+            @if (!isClosed()) {
+              <mat-icon class="arrow-icon">expand_more</mat-icon>
+            }
+          </a>
+
+          @if (!isClosed() && isExpanded(item)) {
+            <ul class="submenu-list">
+              @for (child of item.children; track child.name) {
+                <li class="submenu-item">
+                  <a [routerLink]="child.route" routerLinkActive="active-sub-link">
+                    <mat-icon class="sub-icon">{{child.icon}}</mat-icon>
+                    <span class="sub-link-name">{{child.name}}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+
+          <mat-menu #submenu="matMenu" class="sidebar-dropdown-menu">
+            <div class="dropdown-header">{{item.name}}</div>
+            @for (child of item.children; track child.name) {
+              <a mat-menu-item [routerLink]="child.route" routerLinkActive="active-menu-item">
+                <mat-icon>{{child.icon}}</mat-icon>
+                <span>{{child.name}}</span>
+              </a>
+            }
+          </mat-menu>
+        </li>
+      } @else {
+        <li class="nav-item">
+          <a [routerLink]="item.route" routerLinkActive="active-link">
+            <mat-icon [matTooltip]="isClosed() ? item.name : ''">{{item.icon}}</mat-icon>
+            <span class="link-name">{{item.name}}</span>
+          </a>
+        </li>
+      }
     }
   </ul>
 

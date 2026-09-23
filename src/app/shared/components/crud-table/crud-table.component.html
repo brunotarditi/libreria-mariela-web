@@ -43,16 +43,32 @@
 
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell no-data" [attr.colspan]="displayedColumns().length">
-        <div class="no-data-container">
-          @if (isLoading()) {
-            <mat-spinner diameter="40"></mat-spinner>
-          } @else {
-            <mat-icon>search_off</mat-icon>
-            <span>
-              {{ input.value ? 'No se encontraron resultados para "' + input.value + '"' : 'No hay datos disponibles' }}
-            </span>
-          }
-        </div>
+        @if (isLoading()) {
+          <div class="no-data-loading">
+            <mat-spinner diameter="36"></mat-spinner>
+            <span>Cargando datos...</span>
+          </div>
+        } @else if (input.value) {
+          <div class="no-data-search">
+            <mat-icon class="no-data-icon">search_off</mat-icon>
+            <p class="no-data-title">Sin resultados</p>
+            <p class="no-data-subtitle">No se encontraron {{ title().toLowerCase() }} que coincidan con "{{ input.value }}"</p>
+            <button mat-button class="btn-clear-search" (click)="clearFilter(input)">
+              Limpiar búsqueda
+            </button>
+          </div>
+        } @else {
+          <div class="empty-state-container">
+            <div class="empty-state-badge">
+              <mat-icon>{{ icon() }}</mat-icon>
+            </div>
+            <h3 class="empty-state-title">No hay {{ title().toLowerCase() }} registrados</h3>
+            <p class="empty-state-subtitle">Comienza creando el primer registro en el sistema para empezar a gestionarlo.</p>
+            <button mat-flat-button class="btn-empty-cta" (click)="onCreate()" [disabled]="!permission()">
+              <mat-icon>add</mat-icon> Crear {{ entityName() }}
+            </button>
+          </div>
+        }
       </td>
     </tr>
   </table>

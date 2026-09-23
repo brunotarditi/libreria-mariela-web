@@ -25,9 +25,26 @@
   background-color: var(--btn-disabled-bg);
 }
 
+.btn-dialog-save.btn-destructive {
+  background-color: var(--danger-color);
+  color: #FFF;
+}
+
+.btn-dialog-save.btn-destructive:hover {
+  background-color: var(--danger-text);
+}
+
 .message{
   padding: 10px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-color);
   font-weight: 400;
+  line-height: 1.5;
+}
+
+.warning-subtext {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  margin-bottom: 0;
 }

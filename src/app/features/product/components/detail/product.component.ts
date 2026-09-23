@@ -1,5 +1,5 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '@features/brand/model/brand';
@@ -34,6 +35,7 @@ import { SnackBarService } from '@shared/services/snackbar.service';
     MatInputModule,
     MatCardModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     TitleComponent,
   ],
@@ -45,6 +47,7 @@ export class ProductComponent implements OnInit {
   categories: Category[] = [];
   brands: Brand[] = [];
   id: number = 0;
+  isSubmitting = signal<boolean>(false);
 
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -135,7 +138,8 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.productForm.valid) {
+    if (this.productForm.valid && !this.isSubmitting()) {
+      this.isSubmitting.set(true);
       const product: Product = {
         ID: 0,
         name: this.name.value,
@@ -149,26 +153,34 @@ export class ProductComponent implements OnInit {
       if (this.id > 0) {
         this.productService.update(this.id, product).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se actualizó con éxito el producto ${res.name.toLowerCase()}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se actualizó con éxito el producto ${res.name.toLowerCase()}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al actualizar el producto: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.productForm.reset();
             this.goBack();
           }
-        })
+        });
       }else{
         this.productService.save(product).subscribe({
           next: () => {
-            this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al crear el producto: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.productForm.reset();
             this.goBack();
           }
         });
       }
-
-
     }
   }
 

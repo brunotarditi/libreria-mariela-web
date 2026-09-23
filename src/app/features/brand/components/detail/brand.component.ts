@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrandService } from '@features/brand/services/brand.service';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
     TitleComponent
@@ -34,6 +36,7 @@ export class BrandComponent implements OnInit {
   brandId: string | null = null;
   hasExist: boolean = false;
   id: number = 0;
+  isSubmitting = signal<boolean>(false);
 
   private brandService = inject(BrandService);
   private formBuilder = inject(FormBuilder);
@@ -84,6 +87,11 @@ export class BrandComponent implements OnInit {
   }
 
   onSubmit(){
+    if (this.brandForm.invalid || this.isSubmitting()) {
+      return;
+    }
+    this.isSubmitting.set(true);
+
     if (this.brands.length === 1) {
       const brand: Brand = {
           ID: this.id || 0,
@@ -92,41 +100,56 @@ export class BrandComponent implements OnInit {
       if (this.id > 0) {
         this.brandService.update(this.id, brand).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se actualizó con éxito la marca ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se actualizó con éxito la marca ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al actualizar la marca: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }else{
         this.brandService.save(brand).subscribe({
           next: (res) => {
-            this.snackBarService.showSnackBar(`Se guardó con éxito la marca ${res.name}`, 'success-snackbar', 3000, 'end', 'top')
+            this.snackBarService.showSnackBar(`Se guardó con éxito la marca ${res.name}`, 'success-snackbar', 3000, 'end', 'top');
+          },
+          error: (err) => {
+            this.isSubmitting.set(false);
+            this.snackBarService.showSnackBar(`Error al guardar la marca: ${err}`, 'error-snackbar', 3000, 'end', 'top');
           },
           complete: () => {
+            this.isSubmitting.set(false);
             this.resetForm();
             this.goBack();
           }
-        })
+        });
       }
 
     }else{
-      let brands: Brand[] = []
+      let brands: Brand[] = [];
 
       this.brands.value.forEach((item: string) => {
-        brands.push({ID: 0, name: item})
+        brands.push({ID: 0, name: item});
       });
 
       this.brandService.saveMany(brands).subscribe({
         next: () => {
-          this.snackBarService.showSnackBar(`Se guardaron con éxito las marcas`, 'success-snackbar', 3000, 'end', 'top')
+          this.snackBarService.showSnackBar(`Se guardaron con éxito las marcas`, 'success-snackbar', 3000, 'end', 'top');
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          this.snackBarService.showSnackBar(`Error al guardar las marcas: ${err}`, 'error-snackbar', 3000, 'end', 'top');
         },
         complete: () => {
+          this.isSubmitting.set(false);
           this.resetForm();
           this.goBack();
         }
-      })
+      });
     }
   }
 
