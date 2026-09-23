@@ -28,6 +28,17 @@
   background-color: var(--navlink-color);
 }
 
+.nav-links li a.active-link {
+  background-color: var(--badge-edit-bg);
+  border-radius: 8px;
+}
+
+.nav-links li a.active-link mat-icon,
+.nav-links li a.active-link .link-name {
+  color: var(--navlink-color);
+  font-weight: 500;
+}
+
 .menu-items li a mat-icon {
   display: flex;
   justify-content: center;

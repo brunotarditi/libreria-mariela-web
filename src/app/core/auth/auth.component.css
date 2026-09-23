@@ -48,22 +48,41 @@ a {
   transition: var(--tran-05);
 }
 
+.btn-nav-home {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-radius: 20px !important;
+  padding: 0 18px !important;
+  height: 40px !important;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-home:hover {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: #fff !important;
+}
+
 /* FORM CONTAINER */
 .form_container {
   position: absolute;
   top: 50%;
   left: 50%;
-  max-width: 350px;
-  width: 100%;
+  max-width: 400px;
+  width: 90%;
   transform: translate(-50%, -50%);
   z-index: 101;
-  background-color: #FFF;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background-color: var(--panel-color);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
   opacity: 0;
   pointer-events: none;
-  transition: all 0.4s ease-out ;
+  transition: all 0.4s ease-out;
 }
 
 .background .form_container {

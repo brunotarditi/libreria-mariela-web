@@ -20,14 +20,14 @@
 }
 
 .btn-dialog-save:disabled {
-  color: #dfdfdf;
+  color: var(--btn-disabled-color);
   opacity: 0.6;
-  background-color: #888;
+  background-color: var(--btn-disabled-bg);
 }
 
 .message{
   padding: 10px;
   font-size: 14px;
-  color: #242626;
+  color: var(--text-color);
   font-weight: 400;
 }

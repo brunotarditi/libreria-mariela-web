@@ -114,7 +114,7 @@
           </mat-label>
         </mat-form-field>
 
-        <mat-form-field class="w100" appearance="outline">
+        <mat-form-field class="w100 full-width" appearance="outline">
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="description" placeholder="Ej. Lapicera de color azul"></textarea>
           @if(description.hasError('maxlength') && description.touched) {
@@ -124,7 +124,7 @@
           }
         </mat-form-field>
 
-        <mat-card-actions>
+        <mat-card-actions class="full-width">
           <button mat-fab extended class="btn-save w100" type="submit" [disabled]="productForm.invalid">
             Guardar
           </button>

@@ -83,11 +83,38 @@ export class AuthService {
     }
   }
 
-  logOut(): void {
+  clearLocalTokens(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.clear();
+
+    const savedMode = this.storageService.get('mode');
     this.storageService.clear(ACCESS_TOKEN);
+    sessionStorage.clear();
+    if (savedMode) {
+      this.storageService.set('mode', savedMode);
+    }
+
     this.rolesSignal.set([]);
-    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/login`);
-    window.location.href = `${environment.peakAuthUrl}/oauth/logout?redirect_uri=${redirectUri}`;
   }
 
+  logOut(): void {
+    // 1. Limpiar sesión y tokens locales
+    this.clearLocalTokens();
+
+    // 2. Obtener URL de logout federado de Peak Auth
+    const logoutUrl = this.peakAuthClient.getLogoutUrl({
+      redirectUri: `${window.location.origin}/auth/login`,
+    });
+
+    // 3. Redirigir la ventana a Peak Auth
+    window.location.href = logoutUrl;
+  }
+
+  logout(): void {
+    this.logOut();
+  }
 }

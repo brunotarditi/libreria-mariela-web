@@ -5,7 +5,7 @@
 }
 
 .header-section {
-  background: linear-gradient(135deg, var(--primary-color), #1b7e88);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
   color: white;
   padding: 60px 20px;
   text-align: center;
@@ -26,7 +26,12 @@
   max-width: 800px;
   margin: 30px auto;
   padding: 10px;
-  color: #242626;
+  color: var(--text-color);
+}
+
+.welcome-section mat-card {
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
 }
 
 .features-section {
@@ -39,54 +44,96 @@
   text-align: center;
   font-size: 2rem;
   margin-bottom: 30px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .features-grid {
   display: grid;
-  gap: 20px;
+  gap: 24px;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .feature-card {
   text-align: center;
-  padding: 20px;
-  transition: transform 0.3s ease;
-  border-radius: 12px;
+  padding: 24px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.feature-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background-color: var(--badge-edit-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
 }
 
 .feature-card mat-icon {
-  font-size: 20px;
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
   color: var(--primary-color);
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .feature-card h3 {
-  margin: 10px 0;
-  font-size: 1.5rem;
+  margin: 12px 0 8px;
+  font-size: 1.4rem;
+  color: var(--text-color);
 }
 
-.feature-card button {
-  margin-top: 15px;
+.feature-card p {
+  color: var(--text-color);
+  opacity: 0.85;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.feature-btn {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 0 20px;
+  height: 40px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.feature-btn:hover {
+  opacity: 0.92;
 }
 
 .button-icon {
-  margin-right: 5px;
+  margin-right: 6px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .footer-home {
   margin-top: auto;
-  padding: 20px;
+  padding: 24px 20px;
   text-align: center;
-  background-color: #f2f2f2;
+  background-color: var(--panel-color);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
 .footer-home a {
   color: var(--primary-color);
   text-decoration: none;
+  font-weight: 500;
 }

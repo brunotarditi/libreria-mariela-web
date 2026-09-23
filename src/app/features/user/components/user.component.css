@@ -22,11 +22,11 @@
   justify-content: center;
   margin: 10px 0;
   font-style: italic;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .error-message {
-  color: #d32f2f;
+  color: var(--danger-color);
   font-weight: 500;
 }
 
@@ -59,9 +59,10 @@
 }
 
 .btn-save:disabled {
-  color: #dfdfdf;
-  opacity: 0.8;
-  background-color: #a3b1d8;
+  color: var(--btn-disabled-color);
+  opacity: 0.7;
+  background-color: var(--btn-disabled-bg);
+  cursor: not-allowed;
 }
 
 .btn:hover:not(:disabled),
@@ -91,12 +92,12 @@
   justify-content: center;
   gap: 8px;
   padding: 16px;
-  color: #757575;
+  color: var(--text-secondary);
   font-size: 18px;
 }
 
 .no-data-container mat-icon {
-  color: #757575;
+  color: var(--text-secondary);
 }
 
 .form {

@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { Item } from '@shared/models/item';
 
@@ -10,7 +10,7 @@ import { Item } from '@shared/models/item';
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
-  imports: [MatIconModule, MatTooltipModule, RouterLink],
+  imports: [MatIconModule, MatTooltipModule, RouterLink, RouterLinkActive],
 })
 export class MenuComponent {
 

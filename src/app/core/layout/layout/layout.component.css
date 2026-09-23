@@ -23,11 +23,28 @@
 }
 
 
+.sidebar-backdrop {
+  display: none;
+}
+
 @media (max-width: 1000px) {
   .dashboard,
   .dashboard.sidebar-closed {
     left: 78px;
     width: calc(100% - 78px);
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 990;
+    backdrop-filter: blur(1px);
+    transition: opacity 0.3s ease;
   }
 }
 

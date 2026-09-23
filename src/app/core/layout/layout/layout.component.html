@@ -1,13 +1,18 @@
 <!-- Sidebar -->
 <app-sidebar [isOpen]="isOpen" [status]="status" [ngClass]="status"></app-sidebar>
 
+<!-- Backdrop on mobile/tablet when sidebar is opened -->
+@if (isOpen) {
+  <div class="sidebar-backdrop" (click)="toggle(false)"></div>
+}
+
 <!-- Dashboard -->
 <section class="dashboard" [ngClass]="{'sidebar-closed': !isOpen}">
   @if (loadingService.isLoading()) {
     <mat-progress-bar mode="indeterminate" class="global-progress-bar"></mat-progress-bar>
   }
   <!-- header -->
-  <app-header (toggleSidebar)="toggle($event)"></app-header>
+  <app-header [isOpen]="isOpen" (toggleSidebar)="toggle($event)"></app-header>
   <!-- content -->
   <div class="dash-content">
     <router-outlet></router-outlet>

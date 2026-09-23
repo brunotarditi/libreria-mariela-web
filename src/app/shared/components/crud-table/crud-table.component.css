@@ -3,15 +3,35 @@
 }
 
 .btn-action {
-  color: #fff;
-  background-color: var(--btn-color);
-  margin: 0px 5px;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  margin: 0px 4px;
+  transition: all 0.2s ease;
 }
 
-.btn-action:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
-  transition: var(--tran-02);
+.btn-action.btn-edit {
+  background-color: var(--badge-edit-bg) !important;
+  color: var(--primary-accent) !important;
+}
+
+.btn-action.btn-edit:hover:not(:disabled) {
+  background-color: var(--badge-edit-hover) !important;
+  transform: translateY(-1px);
+}
+
+.btn-action.btn-delete {
+  background-color: var(--badge-delete-bg) !important;
+  color: var(--danger-text) !important;
+}
+
+.btn-action.btn-delete:hover:not(:disabled) {
+  background-color: var(--badge-delete-hover) !important;
+  transform: translateY(-1px);
+}
+
+.mat-mdc-row:hover {
+  background-color: var(--surface-hover);
+  transition: background-color 0.15s ease;
 }
 
 .search {
@@ -26,18 +46,24 @@
   margin: 5px 5px;
 }
 
+.header-grid button[mat-fab] {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.25) !important;
+}
+
 .no-data-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 16px;
-  color: #757575;
+  color: var(--text-secondary);
   font-size: 18px;
 }
 
 .no-data-container mat-icon {
-  color: #757575;
+  color: var(--text-secondary);
 }
 
 @media screen and (max-width: 1000px) {

@@ -27,10 +27,12 @@
     <div class="features-grid">
       <mat-card class="feature-card mat-elevation-z3" *ngFor="let feature of features">
         <mat-card-content>
-          <mat-icon>{{ feature.icon }}</mat-icon>
+          <div class="feature-icon-wrapper">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+          </div>
           <h3>{{ feature.title }}</h3>
           <p>{{ feature.description }}</p>
-          <button mat-raised-button color="accent" [routerLink]="[feature.route]">
+          <button mat-flat-button class="feature-btn" [routerLink]="[feature.route]">
             <mat-icon class="button-icon">arrow_forward</mat-icon>
             {{ feature.buttonText }}
           </button>
@@ -40,7 +42,7 @@
   </section>
 
   <footer class="footer-home">
-    <p>© 2025 Sistema Interno - Librería Mariela</p>
+    <p>© 2025 - 2026 Sistema Interno - Librería Mariela</p>
     <p>Soporte: <a href="mailto:marielatomasini@hotmail.es">marielatomasini&#64;hotmail.es</a></p>
   </footer>
 </div>

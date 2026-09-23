@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,12 +19,11 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class HeaderComponent {
 
-  isOpen: boolean = true;
+  @Input() isOpen: boolean = true;
   @Output() toggleSidebar = new EventEmitter<boolean>();
 
   toggle() {
-    this.isOpen = !this.isOpen
-    this.toggleSidebar.emit(this.isOpen);
+    this.toggleSidebar.emit(!this.isOpen);
   }
 
 }
