@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { CategoryService } from '@features/category/services/category.service';
 import { Category } from '../../model/category';
 import { SnackBarService } from '@shared/services/snackbar.service';
@@ -41,6 +42,21 @@ export class CategoriesComponent implements OnInit {
         this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top');
         this.getData();
       },
+    });
+  }
+
+  onBulkDelete(items: Category[]): void {
+    this.isLoading.set(true);
+    const deleteObservables = items.map(item => this.categoryService.deleteById(item.ID));
+    forkJoin(deleteObservables).subscribe({
+      next: () => {
+        this.snackBarService.showSnackBar(`Se eliminaron ${items.length} categorías con éxito`, 'success-snackbar', 3000, 'end', 'top');
+        this.getData();
+      },
+      error: (err) => {
+        this.snackBarService.showSnackBar(`Error al eliminar categorías: ${err}`, 'error-snackbar', 3000, 'end', 'top');
+        this.getData();
+      }
     });
   }
 }

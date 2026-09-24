@@ -9,5 +9,6 @@
   [columns]="columns"
   [data]="suppliers()"
   [isLoading]="isLoading()"
-  (deleteConfirmed)="onDelete($event)">
+  (deleteConfirmed)="onDelete($event)"
+  (bulkDeleteConfirmed)="onBulkDelete($event)">
 </app-crud-table>

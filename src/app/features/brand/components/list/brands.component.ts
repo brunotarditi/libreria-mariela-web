@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { BrandService } from '@features/brand/services/brand.service';
 import { Brand } from '../../model/brand';
 import { SnackBarService } from '@shared/services/snackbar.service';
@@ -41,6 +42,21 @@ export class BrandsComponent implements OnInit {
         this.snackBarService.showSnackBar(`${res.message}`, 'success-snackbar', 3000, 'end', 'top');
         this.getData();
       },
+    });
+  }
+
+  onBulkDelete(items: Brand[]): void {
+    this.isLoading.set(true);
+    const deleteObservables = items.map(item => this.brandService.deleteById(item.ID));
+    forkJoin(deleteObservables).subscribe({
+      next: () => {
+        this.snackBarService.showSnackBar(`Se eliminaron ${items.length} marcas con éxito`, 'success-snackbar', 3000, 'end', 'top');
+        this.getData();
+      },
+      error: (err) => {
+        this.snackBarService.showSnackBar(`Error al eliminar marcas: ${err}`, 'error-snackbar', 3000, 'end', 'top');
+        this.getData();
+      }
     });
   }
 }
