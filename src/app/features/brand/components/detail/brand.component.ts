@@ -13,6 +13,13 @@ import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { ComponentCanDeactivate } from '@core/guards/pending-changes.guard';
+
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
@@ -27,10 +34,11 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
-    TitleComponent
+    TitleComponent,
+    BreadcrumbComponent,
   ],
 })
-export class BrandComponent implements OnInit {
+export class BrandComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('formDirective') private formDirective: FormGroupDirective | undefined;
   brandId: string | null = null;
@@ -43,6 +51,7 @@ export class BrandComponent implements OnInit {
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
 
   brandForm = this.formBuilder.group({
     names: this.formBuilder.array([
@@ -158,6 +167,30 @@ export class BrandComponent implements OnInit {
       this.formDirective.resetForm();
     }
     this.brandForm.reset();
+  }
+
+  get breadcrumbs(): BreadcrumbItem[] {
+    return [
+      { label: 'Productos', route: '/products' },
+      { label: 'Marcas', route: '/brands' },
+      { label: this.hasExist ? 'Editar marca' : 'Crear marca' }
+    ];
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.brandForm.dirty || this.isSubmitting()) {
+      return true;
+    }
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Tienes modificaciones sin guardar en la marca. Si sales ahora, se perderán los cambios.',
+        confirmText: 'Salir sin guardar',
+        cancelText: 'Continuar editando',
+        isDestructive: true,
+      }
+    });
+    return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
   }
 
   goBack() {

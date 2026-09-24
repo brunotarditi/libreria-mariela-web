@@ -12,6 +12,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '@features/brand/model/brand';
 import { BrandService } from '@features/brand/services/brand.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { ComponentCanDeactivate } from '@core/guards/pending-changes.guard';
 import { Category } from '@features/category/model/category';
 import { CategoryService } from '@features/category/services/category.service';
 import { Product } from '@features/product/model/product';
@@ -38,9 +43,10 @@ import { SnackBarService } from '@shared/services/snackbar.service';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     TitleComponent,
+    BreadcrumbComponent,
   ],
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, ComponentCanDeactivate {
   productId: string | null = null;
   selectedFile!: File;
   message: string = '';
@@ -268,6 +274,29 @@ export class ProductComponent implements OnInit {
       },
 
     })
+  }
+
+  get breadcrumbs(): BreadcrumbItem[] {
+    return [
+      { label: 'Productos', route: '/products' },
+      { label: this.productId === 'create' ? 'Crear producto' : 'Editar producto' }
+    ];
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.productForm.dirty || this.isSubmitting()) {
+      return true;
+    }
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Tienes modificaciones sin guardar en el producto. Si sales ahora, se perderán los cambios.',
+        confirmText: 'Salir sin guardar',
+        cancelText: 'Continuar editando',
+        isDestructive: true,
+      }
+    });
+    return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
   }
 
   goBack() {

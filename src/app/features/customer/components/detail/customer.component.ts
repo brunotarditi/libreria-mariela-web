@@ -13,6 +13,13 @@ import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { ComponentCanDeactivate } from '@core/guards/pending-changes.guard';
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -27,10 +34,11 @@ import { Router, ActivatedRoute } from '@angular/router';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
-    TitleComponent
+    TitleComponent,
+    BreadcrumbComponent,
   ],
 })
-export class CustomerComponent implements OnInit {
+export class CustomerComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('formDirective') private formDirective: FormGroupDirective | undefined;
   customerId: string | null = null;
@@ -43,6 +51,7 @@ export class CustomerComponent implements OnInit {
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
 
   customerForm = this.formBuilder.group({
     customers: this.formBuilder.array([
@@ -169,6 +178,29 @@ export class CustomerComponent implements OnInit {
       this.formDirective.resetForm();
     }
     this.customerForm.reset();
+  }
+
+  get breadcrumbs(): BreadcrumbItem[] {
+    return [
+      { label: 'Clientes', route: '/customers' },
+      { label: this.hasExist ? 'Editar cliente' : 'Crear cliente' }
+    ];
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.customerForm.dirty || this.isSubmitting()) {
+      return true;
+    }
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Tienes modificaciones sin guardar en el cliente. Si sales ahora, se perderán los cambios.',
+        confirmText: 'Salir sin guardar',
+        cancelText: 'Continuar editando',
+        isDestructive: true,
+      }
+    });
+    return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
   }
 
   goBack() {

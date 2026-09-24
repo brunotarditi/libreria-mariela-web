@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, input, output, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, HostListener, inject, input, output, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,7 +40,7 @@ export class CrudTableComponent<T = any> {
   title = input.required<string>();
   icon = input.required<string>();
   searchLabel = input<string>('Buscar');
-  searchPlaceholder = input<string>('Buscar...');
+  searchPlaceholder = input<string>('Buscar... (Presiona /)');
   columns = input.required<TableColumn<T>[]>();
   data = input.required<T[]>();
   isLoading = input<boolean>(false);
@@ -49,6 +49,8 @@ export class CrudTableComponent<T = any> {
   entityName = input<string>('elemento');
   allowedRoles = input<string[]>(['ROOT', 'ADMIN', 'WRITE']);
   filterPredicate = input<(data: T, filter: string) => boolean>();
+
+  @ViewChild('input') searchInput?: ElementRef<HTMLInputElement>;
 
   // Outputs
   deleteConfirmed = output<T>();
@@ -147,5 +149,18 @@ export class CrudTableComponent<T = any> {
         this.deleteConfirmed.emit(row);
       }
     });
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardShortcut(event: KeyboardEvent): void {
+    if (event.key === '/' && !this.isEditingInput(event)) {
+      event.preventDefault();
+      this.searchInput?.nativeElement.focus();
+    }
+  }
+
+  private isEditingInput(event: KeyboardEvent): boolean {
+    const target = event.target as HTMLElement;
+    return !!target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
   }
 }

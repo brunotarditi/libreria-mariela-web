@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth.guard';
 import { roleGuard } from '@core/guards/role.guard';
+import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
         path: 'brands/detail/:id',
         loadComponent: () => import('./features/brand/components/detail/brand.component').then(c => c.BrandComponent),
         canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
         data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
       },
       {
@@ -44,6 +46,7 @@ export const routes: Routes = [
         path: 'categories/detail/:id',
         loadComponent: () => import('./features/category/components/detail/category.component').then(c => c.CategoryComponent),
         canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
         data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
       },
       {
@@ -56,6 +59,7 @@ export const routes: Routes = [
         path: 'products/detail/:id',
         loadComponent: () => import('./features/product/components/detail/product.component').then(c => c.ProductComponent),
         canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
         data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
       },
       {
@@ -68,6 +72,7 @@ export const routes: Routes = [
         path: 'suppliers/detail/:id',
         loadComponent: () => import('./features/supplier/components/detail/supplier.component').then(c => c.SupplierComponent),
         canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
         data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
       },
       {
@@ -80,6 +85,7 @@ export const routes: Routes = [
         path: 'customers/detail/:id',
         loadComponent: () => import('./features/customer/components/detail/customer.component').then(c => c.CustomerComponent),
         canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
         data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
       },
       {

@@ -112,6 +112,23 @@ html {
   }
 }
 
+.form-required-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+
+  .required-asterisk {
+    color: var(--danger-color);
+    font-weight: 700;
+  }
+}
+
+/* Accessible focus visible ring */
+*:focus-visible {
+  outline: 2px solid var(--primary-color) !important;
+  outline-offset: 2px !important;
+}
+
 @include mat.form-field-overrides((
   container-text-size: 12px,
   filled-caret-color:  var(--primary-color),

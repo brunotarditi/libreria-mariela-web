@@ -11,8 +11,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button class="btn-dialog-save" [class.btn-destructive]="data.isDestructive" type="button" mat-flat-button (click)="save()">
-    {{ data.isDestructive ? 'Eliminar' : 'Confirmar' }}
+    {{ data.confirmText ? data.confirmText : (data.isDestructive ? 'Eliminar' : 'Confirmar') }}
   </button>
-  <button class="btn-dialog-cancel" type="button" mat-stroked-button (click)="cancel()">Cancelar</button>
+  <button class="btn-dialog-cancel" type="button" mat-stroked-button (click)="cancel()">
+    {{ data.cancelText ? data.cancelText : 'Cancelar' }}
+  </button>
 </mat-dialog-actions>
 

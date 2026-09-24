@@ -1,6 +1,8 @@
 
+<app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+
 <div class="header">
-  <app-title [title]="'Clientes'" [icon]="'person'"></app-title>
+  <app-title [title]="hasExist ? 'Editar cliente' : 'Crear cliente'" [icon]="'person'"></app-title>
   <button mat-fab extended (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>Volver
   </button>
@@ -27,6 +29,7 @@
       </mat-card-title>
     }
     <mat-card-content>
+      <p class="form-required-hint">Los campos marcados con <span class="required-asterisk">*</span> son obligatorios.</p>
       <form #formDirective="ngForm" class="form" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
         <div formArrayName="customers">
           @for (customer of customers.controls; track i; let i = $index){

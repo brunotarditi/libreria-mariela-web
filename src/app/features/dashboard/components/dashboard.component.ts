@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 import { DashboardService } from '../services/dashboard.service';
 import { Dashboard } from '../models/dashboard';
 import { CommonModule } from '@angular/common';
@@ -9,7 +11,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, TitleComponent, MatIconModule]
+  imports: [CommonModule, TitleComponent, MatIconModule, MatButtonModule, RouterLink]
 })
 export class DashboardComponent implements OnInit {
 

@@ -18,6 +18,30 @@
     </div>
   </div>
 
+  <div class="quick-actions-section">
+    <div class="quick-actions-header">
+      <mat-icon class="quick-actions-icon">bolt</mat-icon>
+      <span class="quick-actions-title">Acciones rápidas</span>
+    </div>
+    <div class="quick-actions-grid">
+      <a mat-flat-button class="action-btn btn-primary-action" routerLink="/products/detail/create">
+        <mat-icon>add</mat-icon> Nuevo Producto
+      </a>
+      <a mat-stroked-button class="action-btn" routerLink="/suppliers/detail/create">
+        <mat-icon>local_shipping</mat-icon> Registrar Proveedor
+      </a>
+      <a mat-stroked-button class="action-btn" routerLink="/customers/detail/create">
+        <mat-icon>person_add</mat-icon> Nuevo Cliente
+      </a>
+      <a mat-stroked-button class="action-btn" routerLink="/brands">
+        <mat-icon>local_offer</mat-icon> Marcas
+      </a>
+      <a mat-stroked-button class="action-btn" routerLink="/categories">
+        <mat-icon>category</mat-icon> Categorías
+      </a>
+    </div>
+  </div>
+
 <div class="activity">
   <app-title [title]="'Actividades recientes'" [icon]="'schedule'"></app-title>
   @let activities = dashboard()?.recent_activities;
@@ -52,9 +76,22 @@
       }
     </div>
   } @else {
-      <div class="no-data">
-        <mat-icon>search_off</mat-icon>
-        <span class="no-data-message">No hay actividades recientes</span>
+    <div class="empty-onboarding-card">
+      <div class="onboarding-icon-wrap">
+        <mat-icon>rocket_launch</mat-icon>
       </div>
+      <h3 class="onboarding-title">¡Comencemos a gestionar tu librería!</h3>
+      <p class="onboarding-desc">
+        Aún no se registran actividades recientes en el sistema. Puedes dar el primer paso creando tus productos, marcas o proveedores.
+      </p>
+      <div class="onboarding-actions">
+        <a mat-flat-button class="btn-onboarding-primary" routerLink="/products/detail/create">
+          <mat-icon>add</mat-icon> Crear primer producto
+        </a>
+        <a mat-stroked-button class="btn-onboarding-secondary" routerLink="/suppliers/detail/create">
+          <mat-icon>local_shipping</mat-icon> Registrar proveedor
+        </a>
+      </div>
+    </div>
   }
 </div>

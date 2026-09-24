@@ -1,6 +1,8 @@
 
+<app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+
 <div class="header">
-  <app-title [title]="'Crear producto'" [icon]="'store'"></app-title>
+  <app-title [title]="productId === 'create' ? 'Crear producto' : 'Editar producto'" [icon]="'store'"></app-title>
   <button mat-fab extended (click)="goBack()">
     <mat-icon>arrow_back</mat-icon>Volver
   </button>
@@ -28,6 +30,7 @@
   <mat-card class="card-form">
     <mat-card-title class="title">Complete el formulario para guardar un producto</mat-card-title>
     <mat-card-content>
+      <p class="form-required-hint">Los campos marcados con <span class="required-asterisk">*</span> son obligatorios.</p>
       <form class="form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="w100" appearance="outline">
           <mat-label>Nombre</mat-label>

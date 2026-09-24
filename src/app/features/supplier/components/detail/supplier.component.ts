@@ -13,6 +13,13 @@ import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
+import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
+import { ComponentCanDeactivate } from '@core/guards/pending-changes.guard';
+
 @Component({
   selector: 'app-supplier',
   templateUrl: './supplier.component.html',
@@ -27,10 +34,11 @@ import { Router, ActivatedRoute } from '@angular/router';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     CommonModule,
-    TitleComponent
+    TitleComponent,
+    BreadcrumbComponent,
   ],
 })
-export class SupplierComponent implements OnInit {
+export class SupplierComponent implements OnInit, ComponentCanDeactivate {
 
   @ViewChild('formDirective') private formDirective: FormGroupDirective | undefined;
   supplierId: string | null = null;
@@ -43,6 +51,7 @@ export class SupplierComponent implements OnInit {
   private snackBarService = inject(SnackBarService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
 
 
   supplierForm = this.formBuilder.group({
@@ -168,6 +177,29 @@ export class SupplierComponent implements OnInit {
       this.formDirective.resetForm();
     }
     this.supplierForm.reset();
+  }
+
+  get breadcrumbs(): BreadcrumbItem[] {
+    return [
+      { label: 'Proveedores', route: '/suppliers' },
+      { label: this.hasExist ? 'Editar proveedor' : 'Crear proveedor' }
+    ];
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.supplierForm.dirty || this.isSubmitting()) {
+      return true;
+    }
+    const dialogRef = this.dialog.open(DialogWarningComponent, {
+      data: {
+        title: 'Cambios sin guardar',
+        message: 'Tienes modificaciones sin guardar en el proveedor. Si sales ahora, se perderán los cambios.',
+        confirmText: 'Salir sin guardar',
+        cancelText: 'Continuar editando',
+        isDestructive: true,
+      }
+    });
+    return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
   }
 
   goBack() {

@@ -6,6 +6,8 @@ export interface DialogWarningData {
   message?: string;
   itemName?: string;
   isDestructive?: boolean;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 export interface DialogFormData {
