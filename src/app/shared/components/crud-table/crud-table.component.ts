@@ -133,6 +133,9 @@ export class CrudTableComponent<T = any> {
     if (event) {
       event.stopPropagation();
     }
+    if (this.isPrimaryColumn(key)) {
+      return;
+    }
     const current = this.visibleColumnKeys();
     if (current.includes(key)) {
       if (current.length <= 1) {
@@ -142,6 +145,11 @@ export class CrudTableComponent<T = any> {
     } else {
       this.visibleColumnKeys.set([...current, key]);
     }
+  }
+
+  isPrimaryColumn(key: string): boolean {
+    const cols = this.columns();
+    return cols.length > 0 && cols[0].key === key;
   }
 
   isColumnVisible(key: string): boolean {
@@ -280,14 +288,37 @@ export class CrudTableComponent<T = any> {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardShortcut(event: KeyboardEvent): void {
+    if (event.ctrlKey || event.altKey || event.metaKey) {
+      return;
+    }
+
     if (event.key === '/' && !this.isEditingInput(event)) {
       event.preventDefault();
       this.searchInput?.nativeElement.focus();
+      return;
+    }
+
+    if ((event.key === 'n' || event.key === 'N') && !this.isEditingInput(event)) {
+      if (this.dialog.openDialogs.length === 0 && this.permission()) {
+        event.preventDefault();
+        this.onCreate();
+        return;
+      }
+    }
+
+    if (event.key === 'Escape' && document.activeElement === this.searchInput?.nativeElement) {
+      this.searchInput.nativeElement.blur();
+      return;
     }
   }
 
   private isEditingInput(event: KeyboardEvent): boolean {
     const target = event.target as HTMLElement;
-    return !!target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+    return !!target && (
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.tagName === 'SELECT' ||
+      target.isContentEditable
+    );
   }
 }

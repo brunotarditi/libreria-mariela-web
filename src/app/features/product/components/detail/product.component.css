@@ -6,12 +6,6 @@
   margin: 8px;
 }
 
-.header button {
-  color: #FFF;
-  background-color: var(--btn-color);
-  height: 48px;
-}
-
 .container {
     display: flex;
     justify-content: center;

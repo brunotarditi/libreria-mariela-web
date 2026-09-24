@@ -5,16 +5,23 @@ import { Brand } from '../../model/brand';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { CrudTableComponent } from '@shared/components/crud-table/crud-table.component';
 import { TableColumn } from '@shared/components/crud-table/crud-table.models';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-brands',
   templateUrl: './brands.component.html',
   standalone: true,
-  imports: [CrudTableComponent],
+  imports: [CrudTableComponent, BreadcrumbComponent],
 })
 export class BrandsComponent implements OnInit {
   brands = signal<Brand[]>([]);
   isLoading = signal<boolean>(true);
+
+  breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Catálogo' },
+    { label: 'Marcas' }
+  ];
 
   columns: TableColumn<Brand>[] = [
     { key: 'name', label: 'Nombre' }

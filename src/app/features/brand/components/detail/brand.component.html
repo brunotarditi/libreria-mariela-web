@@ -1,31 +1,23 @@
 <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
 
 <div class="header">
-  <app-title [title]="hasExist ? 'Editar marca' : 'Crear marca'" [icon]="'local_offer'"></app-title>
-  <button mat-fab extended (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon>Volver
-  </button>
+  <div class="title-with-back">
+    <button mat-icon-button class="btn-back-nav" (click)="goBack()" matTooltip="Volver (Esc)" aria-label="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <app-title [title]="hasExist ? 'Editar marca' : 'Crear marca'" [icon]="'local_offer'"></app-title>
+  </div>
 </div>
 
 <div class="container">
   <mat-card class="card-form">
-    @if(!hasExist){
-      <div class="btn-container">
-        <button mat-flat-button (click)="addField()" class="btn">
-          <mat-icon>add</mat-icon>Agregar campo
-        </button>
-        <button mat-flat-button (click)="deleteField()" class="btn" [disabled]="brands.length <= 1">
-          <mat-icon>remove</mat-icon>Quitar campo
-        </button>
-      </div>
-    }
     @if (brandForm.invalid && brandForm.touched) {
       <mat-card-title class="title error-message">
         Complete el formulario para guardar la marca
       </mat-card-title>
     } @else{
       <mat-card-title class="title">
-        Añade una o hasta 10 marcas
+        {{ hasExist ? 'Modifique los datos de la marca' : 'Añade una o hasta 10 marcas' }}
       </mat-card-title>
     }
     <mat-card-content>
@@ -33,27 +25,46 @@
       <form #formDirective="ngForm" class="form" [formGroup]="brandForm" (ngSubmit)="onSubmit()">
         <div formArrayName="names">
           @for (name of brands.controls; track i; let i = $index){
-            <mat-form-field class="w100" appearance="fill">
-              <mat-label>Nombre</mat-label>
-              <input type="text" matInput [formControlName]="i" placeholder="Ej. Bic">
-              @if(brands.at(i).hasError('required') && brands.at(i).touched) {
-                <mat-error>
-                  El nombre es <strong>requerido</strong>
-                </mat-error>
+            <div class="dynamic-row">
+              <mat-form-field class="w100" appearance="outline">
+                <mat-label>Nombre {{ brands.length > 1 ? '#' + (i + 1) : '' }}</mat-label>
+                <input type="text" matInput [formControlName]="i" placeholder="Ej. Bic">
+                @if(brands.at(i).hasError('required') && brands.at(i).touched) {
+                  <mat-error>
+                    El nombre es <strong>requerido</strong>
+                  </mat-error>
+                }
+              </mat-form-field>
+              @if (!hasExist && brands.length > 1) {
+                <button type="button" mat-icon-button class="btn-remove-row" (click)="deleteField(i)" matTooltip="Quitar esta marca" aria-label="Quitar esta marca">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
               }
-            </mat-form-field>
+            </div>
           }
         </div>
-          <mat-card-actions>
-            <button mat-fab extended class="btn btn-save w100" type="submit" [disabled]="brandForm.invalid || isSubmitting()">
-              @if(isSubmitting()) {
-                <mat-spinner diameter="18" class="btn-spinner"></mat-spinner>
-                <span>Guardando...</span>
-              } @else {
-                <span>Guardar</span>
-              }
+
+        @if (!hasExist && brands.length < 10) {
+          <div class="add-row-container">
+            <button type="button" mat-stroked-button class="btn-add-row" (click)="addField()">
+              <mat-icon>add</mat-icon> Agregar otra marca
             </button>
-          </mat-card-actions>
+          </div>
+        }
+
+        <mat-card-actions class="form-actions-row">
+          <button mat-stroked-button type="button" class="btn-cancel" (click)="goBack()">
+            Cancelar <kbd class="kbd-badge-light">Esc</kbd>
+          </button>
+          <button mat-flat-button class="btn-save" type="submit" [disabled]="brandForm.invalid || isSubmitting()">
+            @if(isSubmitting()) {
+              <mat-spinner diameter="18" class="btn-spinner"></mat-spinner>
+              <span>Guardando...</span>
+            } @else {
+              <span>Guardar</span>
+            }
+          </button>
+        </mat-card-actions>
       </form>
     </mat-card-content>
   </mat-card>

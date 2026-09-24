@@ -1,20 +1,27 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { CustomerService } from '@features/customer/services/customer.service';
- import { Customer } from '../../model/customer';
- import { SnackBarService } from '@shared/services/snackbar.service';
- import { CrudTableComponent } from '@shared/components/crud-table/crud-table.component';
- import { TableColumn } from '@shared/components/crud-table/crud-table.models';
+import { Customer } from '../../model/customer';
+import { SnackBarService } from '@shared/services/snackbar.service';
+import { CrudTableComponent } from '@shared/components/crud-table/crud-table.component';
+import { TableColumn } from '@shared/components/crud-table/crud-table.models';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
 
- @Component({
-   selector: 'app-customers',
-   templateUrl: './customers.component.html',
-   standalone: true,
-   imports: [CrudTableComponent],
- })
- export class CustomersComponent implements OnInit {
-   customers = signal<Customer[]>([]);
-   isLoading = signal<boolean>(true);
+@Component({
+  selector: 'app-customers',
+  templateUrl: './customers.component.html',
+  standalone: true,
+  imports: [CrudTableComponent, BreadcrumbComponent],
+})
+export class CustomersComponent implements OnInit {
+  customers = signal<Customer[]>([]);
+  isLoading = signal<boolean>(true);
+
+  breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Contactos' },
+    { label: 'Clientes' }
+  ];
 
    columns: TableColumn<Customer>[] = [
      { key: 'name', label: 'Nombre' },

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal, HostListener } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrandService } from '@features/brand/services/brand.service';
@@ -9,6 +9,7 @@ import { FormBuilder, FormArray, Validators, ReactiveFormsModule, FormGroupDirec
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,6 +33,7 @@ import { ComponentCanDeactivate } from '@core/guards/pending-changes.guard';
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     CommonModule,
     TitleComponent,
@@ -87,12 +89,12 @@ export class BrandComponent implements OnInit, ComponentCanDeactivate {
     this.brands.push(this.formBuilder.control('', Validators.required))
   }
 
-  deleteField(){
+  deleteField(index: number = this.brands.length - 1){
     if (this.brands.length <= 1) {
       this.snackBarService.showSnackBar('Debe haber al menos una marca', 'error-snackbar', 3000, 'end', 'top')
       return
     }
-    this.brands.removeAt(this.brands.length - 1)
+    this.brands.removeAt(index);
   }
 
   onSubmit(){
@@ -191,6 +193,13 @@ export class BrandComponent implements OnInit, ComponentCanDeactivate {
       }
     });
     return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscape(): void {
+    if (this.dialog.openDialogs.length === 0) {
+      this.goBack();
+    }
   }
 
   goBack() {

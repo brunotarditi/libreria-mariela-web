@@ -5,16 +5,23 @@ import { Supplier } from '../../model/supplier';
 import { SnackBarService } from '@shared/services/snackbar.service';
 import { CrudTableComponent } from '@shared/components/crud-table/crud-table.component';
 import { TableColumn } from '@shared/components/crud-table/crud-table.models';
+import { BreadcrumbComponent, BreadcrumbItem } from '@shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
   standalone: true,
-  imports: [CrudTableComponent],
+  imports: [CrudTableComponent, BreadcrumbComponent],
 })
 export class SuppliersComponent implements OnInit {
   suppliers = signal<Supplier[]>([]);
   isLoading = signal<boolean>(true);
+
+  breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Contactos' },
+    { label: 'Proveedores' }
+  ];
 
   columns: TableColumn<Supplier>[] = [
     { key: 'name', label: 'Nombre' },

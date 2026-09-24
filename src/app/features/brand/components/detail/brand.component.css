@@ -5,12 +5,6 @@
   margin: 8px;
 }
 
-.header button {
-  color: #FFF;
-  background-color: var(--btn-color);
-  height: 48px;
-}
-
 .container {
     display: flex;
     justify-content: center;
@@ -65,8 +59,7 @@
 
 .btn-save {
   color: #fff;
-  background-color:  var(--btn-color);
-  margin-top: 20px;
+  background-color: var(--btn-color);
   padding: 10px 30px;
   border-radius: 6px;
   font-size: 16px;

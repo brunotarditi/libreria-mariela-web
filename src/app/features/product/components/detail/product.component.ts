@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '@features/brand/model/brand';
 import { BrandService } from '@features/brand/services/brand.service';
@@ -41,6 +42,7 @@ import { SnackBarService } from '@shared/services/snackbar.service';
     MatCardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     TitleComponent,
     BreadcrumbComponent,
@@ -297,6 +299,13 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
       }
     });
     return dialogRef.afterClosed().pipe(map(result => result === 'confirm'));
+  }
+
+  @HostListener('window:keydown.escape')
+  onEscape(): void {
+    if (this.dialog.openDialogs.length === 0) {
+      this.goBack();
+    }
   }
 
   goBack() {

@@ -2,10 +2,12 @@
 <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
 
 <div class="header">
-  <app-title [title]="productId === 'create' ? 'Crear producto' : 'Editar producto'" [icon]="'store'"></app-title>
-  <button mat-fab extended (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon>Volver
-  </button>
+  <div class="title-with-back">
+    <button mat-icon-button class="btn-back-nav" (click)="goBack()" matTooltip="Volver (Esc)" aria-label="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <app-title [title]="productId === 'create' ? 'Crear producto' : 'Editar producto'" [icon]="'store'"></app-title>
+  </div>
 </div>
 <div class="container">
   <mat-card class="card-file">
@@ -127,8 +129,11 @@
           }
         </mat-form-field>
 
-        <mat-card-actions class="full-width">
-          <button mat-fab extended class="btn-save w100" type="submit" [disabled]="productForm.invalid || isSubmitting()">
+        <mat-card-actions class="full-width form-actions-row">
+          <button mat-stroked-button type="button" class="btn-cancel" (click)="goBack()">
+            Cancelar <kbd class="kbd-badge-light">Esc</kbd>
+          </button>
+          <button mat-flat-button class="btn-save" type="submit" [disabled]="productForm.invalid || isSubmitting()">
             @if(isSubmitting()) {
               <mat-spinner diameter="18" class="btn-spinner"></mat-spinner>
               <span>Guardando...</span>

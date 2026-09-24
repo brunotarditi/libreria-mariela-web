@@ -2,8 +2,8 @@
 
 <div class="header-grid">
   <div class="header-actions-left">
-    <button mat-fab extended (click)="onCreate()" [disabled]="!permission()">
-      <mat-icon>add</mat-icon>Nuevos
+    <button mat-fab extended (click)="onCreate()" [disabled]="!permission()" matTooltip="Nuevo registro (Presiona N)">
+      <mat-icon>add</mat-icon>Nuevos <kbd class="kbd-badge-light">N</kbd>
     </button>
     <button mat-stroked-button class="btn-table-action" (click)="exportToCsv()" [disabled]="dataSource.data.length === 0" matTooltip="Exportar a CSV / Excel">
       <mat-icon>download</mat-icon> Exportar
@@ -12,13 +12,19 @@
       <mat-icon>view_column</mat-icon> Columnas
     </button>
     <mat-menu #columnMenu="matMenu" class="columns-dropdown-menu">
-      <div class="dropdown-header">Columnas visibles</div>
+      <div class="dropdown-header" (click)="$event.stopPropagation()">Columnas visibles</div>
       @for (col of columns(); track col.key) {
-        <button mat-menu-item (click)="toggleColumn(col.key, $event)">
-          <mat-checkbox [checked]="isColumnVisible(col.key)" (click)="$event.stopPropagation()">
+        <div class="column-menu-item" (click)="$event.stopPropagation()">
+          <mat-checkbox [checked]="isColumnVisible(col.key)"
+                        [disabled]="isPrimaryColumn(col.key)"
+                        (change)="toggleColumn(col.key)"
+                        color="primary">
             {{ col.label }}
+            @if (isPrimaryColumn(col.key)) {
+              <span class="required-col-badge">(Obligatoria)</span>
+            }
           </mat-checkbox>
-        </button>
+        </div>
       }
     </mat-menu>
   </div>
