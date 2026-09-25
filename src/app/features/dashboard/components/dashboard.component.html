@@ -40,6 +40,178 @@
         <mat-icon>category</mat-icon> Categorías
       </a>
     </div>
+  <!-- ANALYTICS & CHARTS SECTION -->
+  <div class="analytics-section">
+    <div class="analytics-header">
+      <div class="analytics-title-group">
+        <div class="analytics-icon-wrap">
+          <mat-icon>insights</mat-icon>
+        </div>
+        <div>
+          <h3 class="analytics-title">Distribución y Métricas del Negocio</h3>
+          <p class="analytics-subtitle">Composición en tiempo real del catálogo y actividad</p>
+        </div>
+      </div>
+
+      <div class="chart-tab-group">
+        <button type="button" 
+                class="chart-tab-btn" 
+                [class.active]="activeTab() === 'categories'"
+                (click)="setTab('categories')">
+          <mat-icon>category</mat-icon>
+          <span>Categorías</span>
+          <span class="tab-badge">{{ categoryDistribution().length }}</span>
+        </button>
+
+        <button type="button" 
+                class="chart-tab-btn" 
+                [class.active]="activeTab() === 'brands'"
+                (click)="setTab('brands')">
+          <mat-icon>local_offer</mat-icon>
+          <span>Marcas</span>
+          <span class="tab-badge">{{ brandDistribution().length }}</span>
+        </button>
+
+        <button type="button" 
+                class="chart-tab-btn" 
+                [class.active]="activeTab() === 'activities'"
+                (click)="setTab('activities')">
+          <mat-icon>history</mat-icon>
+          <span>Actividades</span>
+          <span class="tab-badge">{{ activityDistribution().length }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI HIGHLIGHT PILLS -->
+    <div class="kpi-pills-bar">
+      @if (activeTab() === 'categories') {
+        <div class="kpi-pill">
+          <mat-icon>inventory_2</mat-icon>
+          <span>Artículos analizados: <strong>{{ products().length }}</strong></span>
+        </div>
+        <div class="kpi-pill">
+          <mat-icon>folder</mat-icon>
+          <span>Categorías con stock: <strong>{{ totalCategoriesCount() }}</strong></span>
+        </div>
+        <div class="kpi-pill highlight">
+          <mat-icon>star</mat-icon>
+          <span>Categoría líder: <strong>{{ topCategory() }}</strong></span>
+        </div>
+      } @else if (activeTab() === 'brands') {
+        <div class="kpi-pill">
+          <mat-icon>inventory_2</mat-icon>
+          <span>Artículos analizados: <strong>{{ products().length }}</strong></span>
+        </div>
+        <div class="kpi-pill">
+          <mat-icon>sell</mat-icon>
+          <span>Marcas con stock: <strong>{{ totalBrandsCount() }}</strong></span>
+        </div>
+        <div class="kpi-pill highlight">
+          <mat-icon>workspace_premium</mat-icon>
+          <span>Marca líder: <strong>{{ topBrand() }}</strong></span>
+        </div>
+      } @else {
+        <div class="kpi-pill">
+          <mat-icon>receipt_long</mat-icon>
+          <span>Operaciones auditadas: <strong>{{ dashboard()?.recent_activities?.length || 0 }}</strong></span>
+        </div>
+        <div class="kpi-pill highlight">
+          <mat-icon>update</mat-icon>
+          <span>Último movimiento: <strong>{{ (dashboard()?.recent_activities?.[0]?.request_at | date:'dd/MM/yyyy HH:mm') || 'Sin actividad' }}</strong></span>
+        </div>
+      }
+    </div>
+
+    <!-- CHART CONTENT -->
+    @if (isLoadingChart()) {
+      <div class="chart-loading-state">
+        <div class="shimmer-bar"></div>
+        <div class="shimmer-bar"></div>
+        <div class="shimmer-bar"></div>
+      </div>
+    } @else if (currentChartItems().length) {
+      <div class="chart-layout">
+        <!-- Bars list -->
+        <div class="chart-bars-container">
+          @for (item of currentChartItems(); track item.label) {
+            <div class="chart-bar-row">
+              <div class="bar-header">
+                <div class="bar-label-group">
+                  <span class="bar-color-dot" [style.background-color]="item.color"></span>
+                  <span class="bar-label">{{ item.label }}</span>
+                </div>
+                <div class="bar-values">
+                  <span class="bar-count">{{ item.count }} {{ activeTab() === 'activities' ? 'acciones' : 'artículos' }}</span>
+                  <span class="bar-percentage-badge" [style.color]="item.color" [style.background-color]="item.color + '18'">
+                    {{ item.percentage }}%
+                  </span>
+                </div>
+              </div>
+
+              <div class="bar-track">
+                <div class="bar-fill" 
+                     [style.width.%]="item.percentage" 
+                     [style.background]="'linear-gradient(90deg, ' + item.color + ', ' + item.color + 'dd)'">
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Donut Circular Graphic (Pure SVG, 0 dependencies) -->
+        <div class="chart-circle-card">
+          <div class="circle-chart-wrapper">
+            <svg class="donut-svg" viewBox="0 0 42 42">
+              <circle class="donut-ring" cx="21" cy="21" r="15.9155" fill="transparent" stroke-width="4"></circle>
+              @for (seg of donutSegments(); track seg.label) {
+                <circle class="donut-segment" 
+                        cx="21" 
+                        cy="21" 
+                        r="15.9155" 
+                        fill="transparent" 
+                        [attr.stroke]="seg.color" 
+                        stroke-width="4"
+                        [attr.stroke-dasharray]="seg.dashArray"
+                        [attr.stroke-dashoffset]="seg.dashOffset">
+                </circle>
+              }
+            </svg>
+            <div class="donut-center-text">
+              <span class="donut-center-val">{{ activeTab() === 'activities' ? (dashboard()?.recent_activities?.length || 0) : products().length }}</span>
+              <span class="donut-center-lbl">{{ activeTab() === 'activities' ? 'Registros' : 'Artículos' }}</span>
+            </div>
+          </div>
+
+          <div class="donut-legend">
+            @for (item of currentChartItems(); track item.label) {
+              <div class="legend-item">
+                <span class="legend-dot" [style.background-color]="item.color"></span>
+                <span class="legend-text" [title]="item.label">{{ item.label }}</span>
+                <span class="legend-val">{{ item.percentage }}%</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="chart-empty-state">
+        <mat-icon>bar_chart</mat-icon>
+        <h4>Sin datos suficientes para graficar</h4>
+        <p>
+          @if (activeTab() === 'activities') {
+            Aún no se registran movimientos en el historial de actividades recientes.
+          } @else {
+            Comienza cargando productos con su categoría y marca para ver gráficos de distribución automáticos.
+          }
+        </p>
+        @if (activeTab() !== 'activities') {
+          <a mat-flat-button class="action-btn btn-primary-action" routerLink="/products/detail/create">
+            <mat-icon>add</mat-icon> Crear Primer Producto
+          </a>
+        }
+      </div>
+    }
   </div>
 
 <div class="activity">

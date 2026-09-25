@@ -27,9 +27,11 @@ nav .logo-image {
 }
 
 nav .logo-image img {
-  width: 50px;
-  object-fit: cover;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
   border-radius: 50%;
+  padding: 2px;
 }
 
 nav .logo-name .brand-name {
