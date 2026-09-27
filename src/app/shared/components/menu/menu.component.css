@@ -75,10 +75,19 @@
   transform: rotate(180deg);
 }
 
+.has-submenu > .submenu-toggle.active-link {
+  background-color: transparent !important;
+}
+
+.has-submenu.active-parent > .submenu-toggle {
+  background-color: var(--surface-hover);
+  border-radius: 8px;
+}
+
 .has-submenu.active-parent > .submenu-toggle mat-icon:not(.arrow-icon),
 .has-submenu.active-parent > .submenu-toggle .link-name {
   color: var(--navlink-color);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .submenu-list {

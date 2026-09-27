@@ -44,13 +44,13 @@ export class SidebarComponent implements OnInit {
       allowedRoles: ALLOWED_ROLES
     },
     {
-      name: 'Productos',
-      icon: 'store',
+      name: 'Catálogo',
+      icon: 'inventory_2',
       allowedRoles: ALLOWED_ROLES,
       children: [
         {
-          name: 'Listado',
-          icon: 'inventory_2',
+          name: 'Productos',
+          icon: 'store',
           route: '/products',
           allowedRoles: ALLOWED_ROLES
         },
@@ -69,16 +69,23 @@ export class SidebarComponent implements OnInit {
       ]
     },
     {
-      name: 'Proveedores',
-      icon: 'shopping_bag',
-      route: '/suppliers',
-      allowedRoles: ALLOWED_ROLES
-    },
-    {
-      name: 'Clientes',
-      icon: 'person',
-      route: '/customers',
-      allowedRoles: ALLOWED_ROLES
+      name: 'Contactos',
+      icon: 'contacts',
+      allowedRoles: ALLOWED_ROLES,
+      children: [
+        {
+          name: 'Proveedores',
+          icon: 'shopping_bag',
+          route: '/suppliers',
+          allowedRoles: ALLOWED_ROLES
+        },
+        {
+          name: 'Clientes',
+          icon: 'person',
+          route: '/customers',
+          allowedRoles: ALLOWED_ROLES
+        },
+      ]
     },
     {
       name: 'Usuarios',
