@@ -40,44 +40,65 @@
   right: 12%;
 }
 
-/* Floating ambient sparkles / particles (100% CSS, GPU accelerated) */
-.sparkles-container {
+/* Animated falling particle rain / stars (100% CSS, GPU accelerated) */
+.particle-rain-container {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
 }
 
-.sparkle {
+.rain-drop {
   position: absolute;
+  top: -24px;
   border-radius: 50%;
-  background: radial-gradient(circle, #fff 15%, rgba(var(--primary-rgb), 0.9) 70%, transparent 100%);
-  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.8), 0 0 20px rgba(85, 214, 226, 0.4);
+  background: radial-gradient(circle, #ffffff 30%, rgba(var(--primary-rgb), 0.9) 70%, transparent 100%);
+  box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.9), 0 0 20px rgba(85, 214, 226, 0.6);
   pointer-events: none;
-  animation: floatAndTwinkle 6s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+  animation: rainFall linear infinite;
 }
 
-.sp-1 { width: 6px; height: 6px; top: 16%; left: 14%; animation-duration: 5s; animation-delay: 0s; }
-.sp-2 { width: 8px; height: 8px; top: 30%; right: 16%; animation-duration: 7s; animation-delay: 1.5s; }
-.sp-3 { width: 5px; height: 5px; top: 62%; left: 20%; animation-duration: 6s; animation-delay: 0.8s; }
-.sp-4 { width: 8px; height: 8px; top: 75%; right: 22%; animation-duration: 7.5s; animation-delay: 2.2s; }
-.sp-5 { width: 6px; height: 6px; top: 20%; right: 32%; animation-duration: 5.5s; animation-delay: 3s; }
-.sp-6 { width: 7px; height: 7px; top: 48%; left: 9%; animation-duration: 6.5s; animation-delay: 1.2s; }
+.star-cross {
+  clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 0 12px #55d6e2, 0 0 24px rgba(35, 155, 167, 0.9);
+}
 
-@keyframes floatAndTwinkle {
+@keyframes rainFall {
   0% {
-    transform: translateY(0px) scale(0.85);
-    opacity: 0.35;
+    transform: translate3d(0, -30px, 0) rotate(0deg);
+    opacity: 0;
   }
-  50% {
-    opacity: 0.95;
-    transform: translateY(-12px) scale(1.15);
+  15% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.85;
   }
   100% {
-    transform: translateY(-24px) scale(0.9);
-    opacity: 0.4;
+    transform: translate3d(40px, 680px, 0) rotate(180deg);
+    opacity: 0;
   }
 }
+
+.drop-1  { left: 6%;  width: 5px;  height: 5px;  animation-duration: 5.5s; animation-delay: -1.2s; }
+.drop-2  { left: 13%; width: 10px; height: 10px; animation-duration: 7.2s; animation-delay: -4.5s; }
+.drop-3  { left: 19%; width: 4px;  height: 4px;  animation-duration: 4.8s; animation-delay: -2.1s; }
+.drop-4  { left: 26%; width: 7px;  height: 7px;  animation-duration: 6.5s; animation-delay: -0.6s; }
+.drop-5  { left: 32%; width: 12px; height: 12px; animation-duration: 8.0s; animation-delay: -5.8s; }
+.drop-6  { left: 39%; width: 5px;  height: 5px;  animation-duration: 5.0s; animation-delay: -3.4s; }
+.drop-7  { left: 46%; width: 4px;  height: 4px;  animation-duration: 6.2s; animation-delay: -1.8s; }
+.drop-8  { left: 53%; width: 11px; height: 11px; animation-duration: 7.5s; animation-delay: -4.0s; }
+.drop-9  { left: 61%; width: 6px;  height: 6px;  animation-duration: 5.8s; animation-delay: -0.9s; }
+.drop-10 { left: 68%; width: 4px;  height: 4px;  animation-duration: 4.6s; animation-delay: -3.0s; }
+.drop-11 { left: 75%; width: 13px; height: 13px; animation-duration: 8.2s; animation-delay: -6.4s; }
+.drop-12 { left: 81%; width: 6px;  height: 6px;  animation-duration: 6.0s; animation-delay: -2.7s; }
+.drop-13 { left: 87%; width: 5px;  height: 5px;  animation-duration: 5.2s; animation-delay: -4.9s; }
+.drop-14 { left: 92%; width: 10px; height: 10px; animation-duration: 7.0s; animation-delay: -1.5s; }
+.drop-15 { left: 96%; width: 4px;  height: 4px;  animation-duration: 6.6s; animation-delay: -5.2s; }
+.drop-16 { left: 22%; width: 6px;  height: 6px;  animation-duration: 5.6s; animation-delay: -3.8s; }
 
 .hero-content {
   position: relative;

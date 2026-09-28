@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { AuthService } from '@core/services/auth.service';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [MatButtonModule, MatCardModule]
+  imports: [MatButtonModule, MatCardModule, MatIconModule]
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);

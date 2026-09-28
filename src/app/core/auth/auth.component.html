@@ -1,15 +1,22 @@
-
 <header class="header">
   <nav class="nav">
-    <a (click)="goHome()" class="nav_logo">Librería Mariela</a>
-    <button mat-stroked-button class="btn-nav-home" (click)="goHome()">
-      <mat-icon>home</mat-icon>
-      Home
-    </button>
+    <div class="nav-brand" (click)="goHome()" title="Volver al inicio">
+      <img src="assets/img/logov2.png" alt="Librería Mariela" class="nav-brand-logo">
+      <span class="nav_logo">Librería Mariela</span>
+    </div>
   </nav>
 </header>
 
 <div class="background">
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-particles">
+    <span class="particle pt-1"></span>
+    <span class="particle pt-2"></span>
+    <span class="particle pt-3"></span>
+    <span class="particle pt-4"></span>
+    <span class="particle pt-5"></span>
+  </div>
   <div class="form_container">
     <router-outlet></router-outlet>
   </div>

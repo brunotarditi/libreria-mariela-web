@@ -1,12 +1,23 @@
 <mat-card class="login-card">
   <div class="login-header">
-    <img src="assets/img/logo.png" alt="logo" class="login-logo">
+    <div class="login-logo-wrap">
+      <img src="assets/img/logov2.png" alt="Librería Mariela" class="login-logo">
+    </div>
+    <div class="login-badge">
+      <mat-icon>verified_user</mat-icon>
+      <span>Acceso Seguro</span>
+    </div>
     <mat-card-title>Iniciar sesión</mat-card-title>
-    <p class="login-subtitle">Accede a la plataforma de gestión</p>
+    <p class="login-subtitle">Accede a la plataforma de gestión de Librería Mariela</p>
   </div>
   <mat-card-content>
     <button mat-flat-button class="btn-login" type="button" (click)="loginWithPeakAuth()">
-      Iniciar sesión
+      <mat-icon class="btn-login-icon">login</mat-icon>
+      <span>Ingresar</span>
     </button>
+    <p class="login-security-notice">
+      <mat-icon>lock</mat-icon>
+      <span>Autenticación federada segura</span>
+    </p>
   </mat-card-content>
 </mat-card>
