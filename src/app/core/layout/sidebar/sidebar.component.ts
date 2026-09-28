@@ -87,6 +87,12 @@ export class SidebarComponent implements OnInit {
         },
       ]
     },
+    {
+      name: 'Presupuestos',
+      icon: 'receipt_long',
+      route: '/budgets',
+      allowedRoles: ALLOWED_ROLES
+    },
   ]
 
   ngOnInit(): void {

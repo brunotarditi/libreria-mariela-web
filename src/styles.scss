@@ -10,6 +10,9 @@ $theme: mat.define-theme((
     brand-family: 'Poppins',
     plain-family: 'Poppins',
   ),
+  density: (
+    scale: -1,
+  ),
 ));
 
 html {
@@ -125,12 +128,36 @@ html {
 
 /* Accessible focus visible ring */
 *:focus-visible {
-  outline: 2px solid var(--primary-color) !important;
-  outline-offset: 2px !important;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Remove duplicate inner focus outline on Material form fields (preserves the outer Material outline) */
+.mat-mdc-form-field input,
+.mat-mdc-form-field textarea,
+.mat-mdc-form-field select,
+.mat-mdc-form-field .mat-mdc-select-trigger,
+.mat-mdc-form-field .mdc-text-field__input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field input:focus,
+.mat-mdc-form-field textarea:focus,
+.mat-mdc-form-field select:focus,
+.mat-mdc-form-field input:focus-visible,
+.mat-mdc-form-field textarea:focus-visible,
+.mat-mdc-form-field select:focus-visible,
+.mat-mdc-form-field .mat-mdc-select-trigger:focus,
+.mat-mdc-form-field .mat-mdc-select-trigger:focus-visible,
+.mat-mdc-form-field .mdc-text-field__input:focus,
+.mat-mdc-form-field .mdc-text-field__input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @include mat.form-field-overrides((
-  container-text-size: 12px,
+  container-text-size: 13.5px,
   filled-caret-color:  var(--primary-color),
   filled-label-text-size: 13px,
   outlined-label-text-size: 13px,
@@ -143,6 +170,32 @@ html {
   outlined-focus-outline-color: var(--primary-color),
   outlined-focus-label-text-color: var(--primary-color),
 ));
+
+/* Sleek, professional form-field height (SaaS desktop refinement) */
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  .mat-mdc-form-field-infix {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    min-height: 46px !important;
+  }
+}
+
+/* Balanced typography across all inputs, textareas, and select triggers */
+.mat-mdc-form-field .mdc-text-field__input,
+.mat-mdc-select-value,
+.mat-mdc-select-trigger,
+.mat-mdc-select-value-text {
+  font-size: 13.5px !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field-icon-suffix {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+}
 
 @include mat.table-overrides((
     background-color: #FFF,

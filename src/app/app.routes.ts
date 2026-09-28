@@ -89,6 +89,19 @@ export const routes: Routes = [
         canDeactivate: [pendingChangesGuard],
         data: { roles: [ROLES.OWNER, ROLES.ADMIN] }
       },
+      {
+        path: 'budgets',
+        loadComponent: () => import('./features/budget/components/list/budgets.component').then(c => c.BudgetsComponent),
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ALLOWED_ROLES }
+      },
+      {
+        path: 'budgets/create',
+        loadComponent: () => import('./features/budget/components/create/budget-create.component').then(c => c.BudgetCreateComponent),
+        canActivate: [authGuard, roleGuard],
+        canDeactivate: [pendingChangesGuard],
+        data: { roles: [ROLES.OWNER, ROLES.ADMIN] }
+      },
     ]
   },
   {

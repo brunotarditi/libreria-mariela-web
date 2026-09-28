@@ -1,0 +1,187 @@
+<app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
+
+<div class="header">
+  <div class="title-with-back">
+    <button mat-icon-button class="btn-back-nav" (click)="goBack()" matTooltip="Volver (Esc)" aria-label="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <app-title title="Nuevo Presupuesto" icon="receipt_long"></app-title>
+  </div>
+
+  <div class="header-actions">
+    <button mat-stroked-button class="btn-pdf" type="button" (click)="saveAndDownloadPdf()" [disabled]="budgetForm.invalid || isDownloadingPdf() || isSubmitting()" [matTooltip]="budgetForm.invalid ? 'Completa el cliente y al menos un ítem para generar el PDF' : 'Guardar y descargar presupuesto en PDF'">
+      <ng-container>
+        @if (isDownloadingPdf()) {
+          <mat-spinner diameter="18"></mat-spinner>
+          <span>Generando PDF...</span>
+        } @else {
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>Descargar PDF</span>
+        }
+      </ng-container>
+    </button>
+  </div>
+</div>
+
+<form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
+  <!-- Client and General Details -->
+  <mat-card class="budget-card">
+    <mat-card-title class="card-title">
+      <mat-icon class="card-title-icon">person</mat-icon>
+      <span>Datos del Cliente y Presupuesto</span>
+    </mat-card-title>
+    <mat-card-content class="card-content-grid">
+      <!-- Client Selector / Input -->
+      <div class="field-col">
+        <mat-form-field appearance="outline" class="w100">
+          <mat-label>Nombre del Cliente</mat-label>
+          <input matInput formControlName="client_name" placeholder="Ej. Juan Pérez o Escuela Pompeya" required>
+          <mat-icon matPrefix class="field-icon">badge</mat-icon>
+          @if (budgetForm.get('client_name')?.hasError('required') && budgetForm.get('client_name')?.touched) {
+            <mat-error>El cliente es <strong>requerido</strong></mat-error>
+          }
+        </mat-form-field>
+
+        @if (customers().length > 0) {
+          <div class="client-suggestions">
+            <span class="suggestion-label">Clientes sugeridos:</span>
+            <div class="suggestion-chips">
+              @for (cust of customers().slice(0, 4); track cust.ID) {
+                <span class="suggestion-chip" (click)="selectCustomer(cust.name)">
+                  {{ cust.name }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Description / Purpose -->
+      <div class="field-col">
+        <mat-form-field appearance="outline" class="w100">
+          <mat-label>Descripción o Concepto (opcional)</mat-label>
+          <input matInput formControlName="description" placeholder="Ej. Lista escolar 1er grado / Materiales de oficina">
+          <mat-icon matPrefix class="field-icon">notes</mat-icon>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Items Table Section -->
+  <mat-card class="budget-card items-card">
+    <div class="items-header">
+      <div class="items-title-group">
+        <mat-icon class="card-title-icon">format_list_bulleted</mat-icon>
+        <span class="card-title-text">Artículos del Presupuesto</span>
+        <span class="badge-count">{{ items.length }} ítem{{ items.length > 1 ? 's' : '' }}</span>
+      </div>
+
+      <button mat-flat-button class="btn-add-item" type="button" (click)="addItem()">
+        <mat-icon>add</mat-icon>
+        <span>Agregar ítem</span>
+      </button>
+    </div>
+
+    <div class="items-list" formArrayName="items">
+      <!-- Column headers -->
+      <div class="item-row header-row">
+        <span class="col-product">Producto / Concepto</span>
+        <span class="col-qty">Cantidad</span>
+        <span class="col-price">Precio Unitario</span>
+        <span class="col-subtotal">Subtotal</span>
+        <span class="col-actions"></span>
+      </div>
+
+      @for (item of items.controls; track $index; let i = $index) {
+        <div class="item-row" [formGroupName]="i">
+          <!-- Product Name / Catalog Selector -->
+          <div class="col-product">
+            <mat-form-field appearance="outline" class="w100 no-subscript">
+              <mat-label>Nombre del artículo</mat-label>
+              <input matInput formControlName="product_name" placeholder="Ej. Cuaderno Rivadavia A4" required>
+            </mat-form-field>
+
+            <!-- Quick pick from catalog dropdown if products exist -->
+            @if (products().length > 0) {
+              <div class="product-picker">
+                <mat-select placeholder="Elegir del catálogo" (selectionChange)="onProductSelect(i, $event)" class="catalog-select">
+                  @for (prod of products(); track prod.id) {
+                    <mat-option [value]="prod.id">
+                      {{ prod.name }} ({{ prod.category_name || 'Catálogo' }})
+                    </mat-option>
+                  }
+                </mat-select>
+              </div>
+            }
+          </div>
+
+          <!-- Quantity -->
+          <div class="col-qty">
+            <mat-form-field appearance="outline" class="w100 no-subscript">
+              <input matInput type="number" formControlName="quantity" min="1" required>
+            </mat-form-field>
+          </div>
+
+          <!-- Unit Price -->
+          <div class="col-price">
+            <mat-form-field appearance="outline" class="w100 no-subscript">
+              <span matPrefix class="prefix-currency">$ &nbsp;</span>
+              <input matInput type="number" formControlName="unit_price" min="0" step="50" required>
+            </mat-form-field>
+          </div>
+
+          <!-- Subtotal -->
+          <div class="col-subtotal">
+            <span class="subtotal-val">$ {{ getItemSubtotal(i) | number:'1.2-2' }}</span>
+          </div>
+
+          <!-- Remove Item Button -->
+          <div class="col-actions">
+            <button mat-icon-button type="button" class="btn-remove-row" (click)="removeItem(i)" matTooltip="Quitar ítem" [disabled]="items.length <= 1">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-card>
+
+  <!-- Summary and Total Bar -->
+  <mat-card class="budget-card summary-card">
+    <div class="summary-wrapper">
+      <div class="summary-stats">
+        <div class="stat-box">
+          <span class="stat-label">Artículos totales:</span>
+          <span class="stat-value">{{ itemsCount() }} u.</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Líneas de presupuesto:</span>
+          <span class="stat-value">{{ items.length }}</span>
+        </div>
+      </div>
+
+      <div class="total-box">
+        <span class="total-label">Total Presupuestado:</span>
+        <span class="total-amount">$ {{ totalAmount() | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <div class="form-actions-bar">
+      <button mat-stroked-button type="button" class="btn-cancel" (click)="goBack()">
+        Cancelar <kbd class="kbd-badge-light">Esc</kbd>
+      </button>
+
+      <button mat-flat-button class="btn-save" type="submit" [disabled]="budgetForm.invalid || isSubmitting()">
+        <ng-container>
+          @if (isSubmitting()) {
+            <mat-spinner diameter="18" class="btn-spinner"></mat-spinner>
+            <span>Guardando...</span>
+          } @else {
+            <mat-icon>save</mat-icon>
+            <span>Guardar</span>
+          }
+        </ng-container>
+      </button>
+    </div>
+  </mat-card>
+</form>

@@ -46,6 +46,10 @@ export class ProductService {
     })
   }
 
+  getPrices(): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.api + 'prices');
+  }
+
   importExcel(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
