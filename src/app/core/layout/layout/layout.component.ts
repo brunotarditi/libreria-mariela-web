@@ -6,6 +6,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '@core/layout/header/header.component';
 import { SidebarComponent } from '@core/layout/sidebar/sidebar.component';
 import { LoadingService } from '@core/services/loading.service';
+import { GlobalSearchComponent } from '@shared/components/global-search/global-search.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +17,8 @@ import { filter } from 'rxjs/operators';
     MatSidenavModule,
     MatProgressBarModule,
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    GlobalSearchComponent
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'

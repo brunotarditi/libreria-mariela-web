@@ -74,17 +74,43 @@
   grid-template-columns: 1fr 1fr;
 }
 
+.add-option-mat {
+  opacity: 1 !important;
+  cursor: default !important;
+  border-bottom: 1px dashed var(--border-color);
+  padding: 4px 12px;
+}
+
 .add-option {
   background: none;
-  border:none;
-  color: var(--btn-color);
-  text-decoration: underline;
+  border: none;
+  color: var(--primary-color, #239ba7);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+  width: 100%;
+  padding: 4px 0;
+  font-size: 13px;
 }
 
 .add-option:hover {
-  background-color: var(--badge-edit-bg);
-  text-decoration: underline;
+  color: var(--primary-hover, #1b7e88);
+}
+
+.add-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.btn-suffix-add {
+  color: var(--primary-color, #239ba7);
+}
+
+.btn-suffix-add:hover {
+  color: var(--primary-hover, #1b7e88);
 }
 
 .btn-save {

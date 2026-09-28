@@ -11,6 +11,7 @@
   [columns]="columns"
   [data]="suppliers()"
   [isLoading]="isLoading()"
+  [exportEntity]="'suppliers'"
   (deleteConfirmed)="onDelete($event)"
   (bulkDeleteConfirmed)="onBulkDelete($event)">
 </app-crud-table>

@@ -1,0 +1,205 @@
+@if (searchService.isOpen()) {
+  <div class="search-backdrop" (click)="close()">
+    <div class="search-dialog" (click)="$event.stopPropagation()">
+      <!-- Header / Search input -->
+      <div class="search-header">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="Buscar productos, marcas, categorías, clientes o proveedores..."
+          [formControl]="searchControl"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        @if (isLoading()) {
+          <div class="search-spinner" title="Buscando..."></div>
+        }
+        @if (searchControl.value) {
+          <button type="button" class="btn-clear" (click)="clear()" title="Borrar">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+        <button type="button" class="btn-kbd-close" (click)="close()" title="Cerrar (Esc)">
+          <kbd>ESC</kbd>
+        </button>
+      </div>
+
+      <!-- Results Body -->
+      <div class="search-body">
+        @if (!hasSearched()) {
+          <!-- Empty Query / Initial State -->
+          <div class="search-prompt">
+            <mat-icon class="prompt-icon">manage_search</mat-icon>
+            <p class="prompt-title">Búsqueda Global</p>
+            <p class="prompt-desc">Escribe el nombre de un producto, marca, categoría, proveedor o cliente para encontrarlo al instante.</p>
+            <div class="prompt-chips">
+              <span class="prompt-chip" (click)="searchControl.setValue('Lapicera')">Lapicera</span>
+              <span class="prompt-chip" (click)="searchControl.setValue('Cuaderno')">Cuaderno</span>
+              <span class="prompt-chip" (click)="searchControl.setValue('Bic')">Bic</span>
+            </div>
+          </div>
+        } @else if (isLoading()) {
+          <div class="search-loading">
+            <div class="loading-bar"></div>
+            <span>Buscando en el catálogo...</span>
+          </div>
+        } @else if (!hasAnyResults()) {
+          <!-- No results found -->
+          <div class="search-empty">
+            <mat-icon class="empty-icon">search_off</mat-icon>
+            <p class="empty-title">Sin resultados para "{{ searchControl.value }}"</p>
+            <p class="empty-desc">Revisa la ortografía o intenta buscar con un término más general.</p>
+          </div>
+        } @else {
+          <!-- Grouped Results -->
+          <div class="results-list">
+            <!-- Productos -->
+            @if (results()?.products?.length) {
+              <div class="result-group">
+                <div class="group-title">
+                  <mat-icon>inventory_2</mat-icon>
+                  <span>Productos ({{ results()!.products!.length }})</span>
+                </div>
+                <div class="group-items">
+                  @for (prod of results()!.products; track prod.id) {
+                    <div class="result-item" (click)="navigateTo('/products/detail/' + prod.id)">
+                      <div class="item-icon-box product">
+                        <mat-icon>store</mat-icon>
+                      </div>
+                      <div class="item-info">
+                        <span class="item-name">{{ prod.name }}</span>
+                        @if (prod.description) {
+                          <span class="item-detail">{{ prod.description }}</span>
+                        }
+                      </div>
+                      @if (prod.price !== undefined && prod.price !== null) {
+                        <div class="item-badge price">
+                          ${{ prod.price | number:'1.2-2' }}
+                        </div>
+                      }
+                      <mat-icon class="item-chevron">chevron_right</mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Marcas -->
+            @if (results()?.brands?.length) {
+              <div class="result-group">
+                <div class="group-title">
+                  <mat-icon>local_offer</mat-icon>
+                  <span>Marcas ({{ results()!.brands!.length }})</span>
+                </div>
+                <div class="group-items">
+                  @for (brand of results()!.brands; track brand.id) {
+                    <div class="result-item" (click)="navigateTo('/brands/detail/' + brand.id)">
+                      <div class="item-icon-box brand">
+                        <mat-icon>local_offer</mat-icon>
+                      </div>
+                      <div class="item-info">
+                        <span class="item-name">{{ brand.name }}</span>
+                      </div>
+                      <span class="item-action-hint">Ver detalle</span>
+                      <mat-icon class="item-chevron">chevron_right</mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Categorías -->
+            @if (results()?.categories?.length) {
+              <div class="result-group">
+                <div class="group-title">
+                  <mat-icon>category</mat-icon>
+                  <span>Categorías ({{ results()!.categories!.length }})</span>
+                </div>
+                <div class="group-items">
+                  @for (cat of results()!.categories; track cat.id) {
+                    <div class="result-item" (click)="navigateTo('/categories/detail/' + cat.id)">
+                      <div class="item-icon-box category">
+                        <mat-icon>category</mat-icon>
+                      </div>
+                      <div class="item-info">
+                        <span class="item-name">{{ cat.name }}</span>
+                      </div>
+                      <span class="item-action-hint">Ver detalle</span>
+                      <mat-icon class="item-chevron">chevron_right</mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Proveedores -->
+            @if (results()?.suppliers?.length) {
+              <div class="result-group">
+                <div class="group-title">
+                  <mat-icon>shopping_bag</mat-icon>
+                  <span>Proveedores ({{ results()!.suppliers!.length }})</span>
+                </div>
+                <div class="group-items">
+                  @for (sup of results()!.suppliers; track sup.id) {
+                    <div class="result-item" (click)="navigateTo('/suppliers/detail/' + sup.id)">
+                      <div class="item-icon-box supplier">
+                        <mat-icon>shopping_bag</mat-icon>
+                      </div>
+                      <div class="item-info">
+                        <span class="item-name">{{ sup.name }}</span>
+                        @if (sup.contact) {
+                          <span class="item-detail">{{ sup.contact }}</span>
+                        }
+                      </div>
+                      <span class="item-action-hint">Ver detalle</span>
+                      <mat-icon class="item-chevron">chevron_right</mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Clientes -->
+            @if (results()?.customers?.length) {
+              <div class="result-group">
+                <div class="group-title">
+                  <mat-icon>person</mat-icon>
+                  <span>Clientes ({{ results()!.customers!.length }})</span>
+                </div>
+                <div class="group-items">
+                  @for (cust of results()!.customers; track cust.id) {
+                    <div class="result-item" (click)="navigateTo('/customers/detail/' + cust.id)">
+                      <div class="item-icon-box customer">
+                        <mat-icon>person</mat-icon>
+                      </div>
+                      <div class="item-info">
+                        <span class="item-name">{{ cust.name }}</span>
+                        @if (cust.email) {
+                          <span class="item-detail">{{ cust.email }}</span>
+                        }
+                      </div>
+                      <span class="item-action-hint">Ver detalle</span>
+                      <mat-icon class="item-chevron">chevron_right</mat-icon>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Footer Guide -->
+      <div class="search-footer">
+        <div class="footer-tip">
+          <kbd>Ctrl</kbd> + <kbd>K</kbd> <span>para buscar</span>
+        </div>
+        <div class="footer-tip">
+          <kbd>Esc</kbd> <span>para cerrar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}

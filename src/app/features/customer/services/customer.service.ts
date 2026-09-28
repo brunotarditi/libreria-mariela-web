@@ -35,4 +35,14 @@ export class CustomerService {
   deleteById(id:number): Observable<string>{
     return this.httpClient.delete<string>(this.api + 'customers/' + id)
   }
+
+  bulkDelete(ids: number[]): Observable<{ success: boolean; message: string; deleted_count: number }> {
+    return this.httpClient.post<{ success: boolean; message: string; deleted_count: number }>(this.api + 'customers/bulk-delete', { ids });
+  }
+
+  exportExcel(): Observable<Blob> {
+    return this.httpClient.get<Blob>(this.api + 'customers/export', {
+      responseType: 'blob' as 'json',
+    });
+  }
 }

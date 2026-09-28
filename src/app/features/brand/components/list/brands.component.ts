@@ -54,14 +54,14 @@ export class BrandsComponent implements OnInit {
 
   onBulkDelete(items: Brand[]): void {
     this.isLoading.set(true);
-    const deleteObservables = items.map(item => this.brandService.deleteById(item.ID));
-    forkJoin(deleteObservables).subscribe({
-      next: () => {
-        this.snackBarService.showSnackBar(`Se eliminaron ${items.length} marcas con éxito`, 'success-snackbar', 3000, 'end', 'top');
+    const ids = items.map(item => item.ID);
+    this.brandService.bulkDelete(ids).subscribe({
+      next: (res) => {
+        this.snackBarService.showSnackBar(res.message || `Se eliminaron ${res.deleted_count} marcas con éxito`, 'success-snackbar', 3000, 'end', 'top');
         this.getData();
       },
       error: (err) => {
-        this.snackBarService.showSnackBar(`Error al eliminar marcas: ${err}`, 'error-snackbar', 3000, 'end', 'top');
+        this.snackBarService.showSnackBar(`Error al eliminar marcas: ${err?.error?.message || err?.message || 'Error del servidor'}`, 'error-snackbar', 3000, 'end', 'top');
         this.getData();
       }
     });

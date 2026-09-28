@@ -5,9 +5,22 @@
     <button mat-fab extended (click)="onCreate()" [disabled]="!permission()" matTooltip="Nuevo registro (Presiona N)">
       <mat-icon>add</mat-icon>Nuevos <kbd class="kbd-badge-light">N</kbd>
     </button>
-    <button mat-stroked-button class="btn-table-action" (click)="exportToCsv()" [disabled]="dataSource.data.length === 0" matTooltip="Exportar a CSV / Excel">
+    <button mat-stroked-button class="btn-table-action" [matMenuTriggerFor]="exportMenu" [disabled]="dataSource.data.length === 0" matTooltip="Exportar registros">
       <mat-icon>download</mat-icon> Exportar
     </button>
+    <mat-menu #exportMenu="matMenu" class="export-dropdown-menu">
+      <div class="dropdown-header">Opciones de exportación</div>
+      @if (exportEntity()) {
+        <button mat-menu-item (click)="downloadNativeExcel()">
+          <mat-icon style="color: #107c41;">description</mat-icon>
+          <span>Excel (.xlsx) con estilo oficial</span>
+        </button>
+      }
+      <button mat-menu-item (click)="exportToCsv()">
+        <mat-icon style="color: var(--primary-color);">table_view</mat-icon>
+        <span>CSV (.csv) compatible con Excel</span>
+      </button>
+    </mat-menu>
     <button mat-stroked-button class="btn-table-action" [matMenuTriggerFor]="columnMenu" matTooltip="Configurar columnas visibles">
       <mat-icon>view_column</mat-icon> Columnas
     </button>

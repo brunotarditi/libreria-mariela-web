@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth.guard';
 import { roleGuard } from '@core/guards/role.guard';
 import { pendingChangesGuard } from '@core/guards/pending-changes.guard';
+import { ALLOWED_ROLES, ROLES } from '@core/constants/constants';
 
 export const routes: Routes = [
   {
@@ -21,78 +22,72 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () => import('./features/dashboard/components/dashboard.component').then(c => c.DashboardComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'brands',
         loadComponent: () => import('./features/brand/components/list/brands.component').then(c => c.BrandsComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'brands/detail/:id',
         loadComponent: () => import('./features/brand/components/detail/brand.component').then(c => c.BrandComponent),
         canActivate: [authGuard, roleGuard],
         canDeactivate: [pendingChangesGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: [ROLES.OWNER, ROLES.ADMIN]  }
       },
       {
         path: 'categories',
         loadComponent: () => import('./features/category/components/list/categories.component').then(c => c.CategoriesComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'categories/detail/:id',
         loadComponent: () => import('./features/category/components/detail/category.component').then(c => c.CategoryComponent),
         canActivate: [authGuard, roleGuard],
         canDeactivate: [pendingChangesGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'products',
         loadComponent: () => import('./features/product/components/list/products.component').then(c => c.ProductsComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'products/detail/:id',
         loadComponent: () => import('./features/product/components/detail/product.component').then(c => c.ProductComponent),
         canActivate: [authGuard, roleGuard],
         canDeactivate: [pendingChangesGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: [ROLES.OWNER, ROLES.ADMIN] }
       },
       {
         path: 'suppliers',
         loadComponent: () => import('./features/supplier/components/list/suppliers.component').then(c => c.SuppliersComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'suppliers/detail/:id',
         loadComponent: () => import('./features/supplier/components/detail/supplier.component').then(c => c.SupplierComponent),
         canActivate: [authGuard, roleGuard],
         canDeactivate: [pendingChangesGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
+        data: { roles: [ROLES.OWNER, ROLES.ADMIN] }
       },
       {
         path: 'customers',
         loadComponent: () => import('./features/customer/components/list/customers.component').then(c => c.CustomersComponent),
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE', 'READ'] }
+        data: { roles: ALLOWED_ROLES }
       },
       {
         path: 'customers/detail/:id',
         loadComponent: () => import('./features/customer/components/detail/customer.component').then(c => c.CustomerComponent),
         canActivate: [authGuard, roleGuard],
         canDeactivate: [pendingChangesGuard],
-        data: { roles: ['ROOT', 'ADMIN', 'WRITE'] }
-      },
-      {
-        path: 'users',
-        loadComponent: () => import('./features/user/components/user.component').then(c => c.UserComponent),
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ROOT'] }
+        data: { roles: [ROLES.OWNER, ROLES.ADMIN] }
       },
     ]
   },

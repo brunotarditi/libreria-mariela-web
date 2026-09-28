@@ -54,14 +54,14 @@ export class CategoriesComponent implements OnInit {
 
   onBulkDelete(items: Category[]): void {
     this.isLoading.set(true);
-    const deleteObservables = items.map(item => this.categoryService.deleteById(item.ID));
-    forkJoin(deleteObservables).subscribe({
-      next: () => {
-        this.snackBarService.showSnackBar(`Se eliminaron ${items.length} categorías con éxito`, 'success-snackbar', 3000, 'end', 'top');
+    const ids = items.map(item => item.ID);
+    this.categoryService.bulkDelete(ids).subscribe({
+      next: (res) => {
+        this.snackBarService.showSnackBar(res.message || `Se eliminaron ${res.deleted_count} categorías con éxito`, 'success-snackbar', 3000, 'end', 'top');
         this.getData();
       },
       error: (err) => {
-        this.snackBarService.showSnackBar(`Error al eliminar categorías: ${err}`, 'error-snackbar', 3000, 'end', 'top');
+        this.snackBarService.showSnackBar(`Error al eliminar categorías: ${err?.error?.message || err?.message || 'Error del servidor'}`, 'error-snackbar', 3000, 'end', 'top');
         this.getData();
       }
     });

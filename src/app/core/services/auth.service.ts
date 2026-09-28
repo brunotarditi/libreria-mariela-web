@@ -1,7 +1,7 @@
 import { inject, Injectable, signal, computed } from "@angular/core";
 import { environment } from "@environments/environment";
 import { StorageService } from "@shared/services/storage.service";
-import { ACCESS_TOKEN } from "@core/constants/constants";
+import { ACCESS_TOKEN, ROLES } from "@core/constants/constants";
 import { PeakAuthClient } from "@brunotarditi/peak-auth";
 
 @Injectable({
@@ -15,10 +15,25 @@ export class AuthService {
     clientId: environment.peakAuthClientId,
   });
 
-  // Reactive roles signal
+  // Reactive user payload and roles signals
+  private userPayloadSignal = signal<Record<string, any> | null>(this.parsePayloadFromToken());
+  readonly userPayload = this.userPayloadSignal.asReadonly();
+
   private rolesSignal = signal<string[]>(this.parseRolesFromToken());
   readonly roles = this.rolesSignal.asReadonly();
-  readonly isRootSignal = computed(() => this.roles().includes('ROOT'));
+  readonly isRootSignal = computed(() => this.roles().includes(ROLES.OWNER));
+
+  readonly userPicture = computed<string | null>(() => {
+    const payload = this.userPayloadSignal();
+    if (!payload) return null;
+    return (payload['picture'] as string) || (payload['avatar'] as string) || (payload['image'] as string) || null;
+  });
+
+  readonly userName = computed<string>(() => {
+    const payload = this.userPayloadSignal();
+    if (!payload) return 'Usuario';
+    return (payload['name'] as string) || (payload['username'] as string) || (payload['email'] as string) || 'Usuario';
+  });
 
   async loginWithPeakAuth(): Promise<void> {
     const redirectUri = `${window.location.origin}/auth/callback`;
@@ -41,6 +56,7 @@ export class AuthService {
     this.storageService.clear(key);
     this.storageService.set(key, value);
     if (key === ACCESS_TOKEN) {
+      this.userPayloadSignal.set(this.parsePayloadFromToken());
       this.rolesSignal.set(this.parseRolesFromToken());
     }
   }
@@ -54,8 +70,8 @@ export class AuthService {
     return !!this.storageService.get(ACCESS_TOKEN);
   }
 
-  isRoot(): boolean {
-    return this.roles().includes('ROOT');
+  isOwner(): boolean {
+    return this.roles().includes(ROLES.OWNER);
   }
 
   getRoles(): string[] {
@@ -63,24 +79,29 @@ export class AuthService {
   }
 
   refreshRoles(): void {
+    this.userPayloadSignal.set(this.parsePayloadFromToken());
     this.rolesSignal.set(this.parseRolesFromToken());
   }
 
-  private parseRolesFromToken(): string[] {
+  private parsePayloadFromToken(): Record<string, any> | null {
     const token = this.storageService.get(ACCESS_TOKEN);
     if (!token || typeof token !== 'string') {
-      return [];
+      return null;
     }
     try {
       const parts = token.split('.');
-      if (parts.length < 2) return [];
+      if (parts.length < 2) return null;
       const payloadBase64Url = parts[1];
       const payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const payload = JSON.parse(atob(payloadBase64));
-      return Array.isArray(payload.roles) ? payload.roles : [];
+      return JSON.parse(atob(payloadBase64));
     } catch {
-      return [];
+      return null;
     }
+  }
+
+  private parseRolesFromToken(): string[] {
+    const payload = this.parsePayloadFromToken();
+    return payload && Array.isArray(payload['roles']) ? payload['roles'] : [];
   }
 
   clearLocalTokens(): void {
@@ -98,6 +119,7 @@ export class AuthService {
       this.storageService.set('mode', savedMode);
     }
 
+    this.userPayloadSignal.set(null);
     this.rolesSignal.set([]);
   }
 

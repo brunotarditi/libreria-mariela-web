@@ -4,9 +4,19 @@
       <mat-icon>menu</mat-icon>
     </button>
   </div>
+
+  <div class="center">
+    <button type="button" class="btn-search-trigger" (click)="searchService.open()" title="Buscar en todo el sistema (Ctrl + K)">
+      <mat-icon class="search-trigger-icon">search</mat-icon>
+      <span class="search-trigger-text">Buscar productos, marcas, clientes...</span>
+      <kbd class="search-trigger-kbd">Ctrl K</kbd>
+    </button>
+  </div>
+
   <div class="right">
     <button mat-icon-button
             [matMenuTriggerFor]="notifMenu"
+            (menuOpened)="onNotificationMenuOpened()"
             aria-label="Notificaciones"
             class="btn-notification"
             matTooltip="Notificaciones">
@@ -70,6 +80,10 @@
       </div>
     </mat-menu>
 
-    <img [src]="'assets/img/profile.png'" alt="perfil">
+    <img [src]="authService.userPicture() || 'assets/img/profile.png'"
+         (error)="onAvatarError($event)"
+         [alt]="authService.userName()"
+         [title]="authService.userName()"
+         class="user-avatar">
   </div>
 </div>

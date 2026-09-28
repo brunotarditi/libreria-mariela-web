@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@environments/environment';
 import { Component, computed, effect, ElementRef, HostListener, inject, input, output, signal, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,6 +20,7 @@ import { AuthService } from '@core/services/auth.service';
 import { DialogWarningComponent } from '@shared/components/dialog/warning/dialog-warning.component';
 import { TitleComponent } from '@shared/components/title/title.component';
 import { TableColumn } from './crud-table.models';
+import { ROLES } from '@core/constants/constants';
 
 @Component({
   selector: 'app-crud-table',
@@ -52,9 +55,12 @@ export class CrudTableComponent<T = any> {
   createRoute = input<string>();
   editRoutePrefix = input<string>();
   entityName = input<string>('elemento');
-  allowedRoles = input<string[]>(['ROOT', 'ADMIN', 'WRITE']);
+  allowedRoles = input<string[]>([ROLES.OWNER, ROLES.ADMIN]);
   filterPredicate = input<(data: T, filter: string) => boolean>();
   enableSelection = input<boolean>(true);
+  exportEntity = input<string>();
+
+  private http = inject(HttpClient);
 
   @ViewChild('input') searchInput?: ElementRef<HTMLInputElement>;
 
@@ -198,6 +204,32 @@ export class CrudTableComponent<T = any> {
       if (result !== undefined) {
         this.bulkDeleteConfirmed.emit(selectedItems);
         this.selection.clear();
+      }
+    });
+  }
+
+  // Native Excel Export via Backend API (.xlsx)
+  downloadNativeExcel(): void {
+    const entity = this.exportEntity();
+    if (!entity) {
+      this.exportToCsv();
+      return;
+    }
+    const url = `${environment.api}${entity}/export`;
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${entity}_export.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+      },
+      error: (err) => {
+        console.error('Error al exportar Excel desde API, exportando a CSV:', err);
+        this.exportToCsv();
       }
     });
   }

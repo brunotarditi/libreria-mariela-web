@@ -27,7 +27,6 @@ import { TitleComponent } from '@shared/components/title/title.component';
 import { FieldControlConfig } from '@shared/models/dialog';
 import { SnackBarService } from '@shared/services/snackbar.service';
 
-
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
@@ -67,133 +66,161 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
   private productService = inject(ProductService);
 
   productForm = this.formBuilder.group({
-    name: ['', [Validators.required,  Validators.maxLength(65)]],
-    code: ['', [Validators.required,  Validators.maxLength(20)]],
+    name: ['', [Validators.required, Validators.maxLength(65)]],
+    code: ['', [Validators.required, Validators.maxLength(20)]],
     sku: ['', Validators.maxLength(20)],
     profitMargin: ['', [Validators.required, Validators.max(100)]],
     description: ['', Validators.maxLength(150)],
-    category: [0, Validators.required],
-    brand: [0,Validators.required],
+    category: [null as number | null, [Validators.required, Validators.min(1)]],
+    brand: [null as number | null, [Validators.required, Validators.min(1)]],
   });
 
   get name() {
-    return this.productForm.get('name') as FormControl
+    return this.productForm.get('name') as FormControl;
   }
 
   get code() {
-    return this.productForm.get('code') as FormControl
+    return this.productForm.get('code') as FormControl;
   }
 
   get sku() {
-    return this.productForm.get('sku') as FormControl
+    return this.productForm.get('sku') as FormControl;
   }
 
   get profitMargin() {
-    return this.productForm.get('profitMargin') as FormControl
+    return this.productForm.get('profitMargin') as FormControl;
   }
 
   get description() {
-    return this.productForm.get('description') as FormControl
+    return this.productForm.get('description') as FormControl;
   }
 
   get category() {
-    return this.productForm.get('category') as FormControl
+    return this.productForm.get('category') as FormControl;
   }
 
   get brand() {
-    return this.productForm.get('brand') as FormControl
+    return this.productForm.get('brand') as FormControl;
+  }
+
+  private getErrorMessage(err: any, fallback: string): string {
+    if (!err) return fallback;
+    if (typeof err === 'string') return err;
+    if (err.error) {
+      if (typeof err.error === 'string') return err.error;
+      if (err.error.error && typeof err.error.error === 'string') return err.error.error;
+      if (err.error.message && typeof err.error.message === 'string') return err.error.message;
+    }
+    return err.message || fallback;
   }
 
   ngOnInit() {
     this.loadCategories();
     this.loadBrands();
     this.productId = this.route.snapshot.params['id'];
-    if (this.productId !== 'create') {
-      if(this.productId){
-        this.productService.getById(+this.productId).subscribe({
-          next: (res) => {
-            this.id = res.ID
-            this.productForm.setValue(
-              {
-                name: res.name,
-                sku: res.sku,
-                code: res.code,
-                profitMargin: String(res.profit_margin),
-                description: res.description,
-                category: res.category_id,
-                brand: res.brand_id
-              })
-          },
-          error: (err) => this.snackBarService.showSnackBar(`Error al cargar el producto: ${err}`, 'error-snackbar', 3000, 'end', 'top')
-        })
-      }
+    if (this.productId !== 'create' && this.productId) {
+      this.productService.getById(+this.productId).subscribe({
+        next: (res) => {
+          this.id = res.ID;
+          this.productForm.setValue({
+            name: res.name,
+            sku: res.sku,
+            code: res.code,
+            profitMargin: String(res.profit_margin),
+            description: res.description,
+            category: res.category_id,
+            brand: res.brand_id
+          });
+        },
+        error: (err) => {
+          const msg = this.getErrorMessage(err, 'No se pudo cargar el producto');
+          this.snackBarService.showSnackBar(`Error al cargar el producto: ${msg}`, 'error-snackbar', 3000, 'end', 'top');
+        }
+      });
     }
   }
 
-  loadCategories(){
+  loadCategories() {
     this.categoryService.getAll().subscribe({
       next: (res) => this.categories = res,
-      error: (err) => this.snackBarService.showSnackBar(`Error al cargar las categorías: ${err}`, 'error-snackbar', 3000, 'end', 'top')
-    })
-
+      error: (err) => {
+        const msg = this.getErrorMessage(err, 'No se pudieron cargar las categorías');
+        this.snackBarService.showSnackBar(`Error al cargar las categorías: ${msg}`, 'error-snackbar', 3000, 'end', 'top');
+      }
+    });
   }
 
-  loadBrands(){
+  loadBrands() {
     this.brandService.getAll().subscribe({
       next: (res) => this.brands = res,
-      error: (err) => this.snackBarService.showSnackBar(`Error al cargar las marcas: ${err}`, 'error-snackbar', 3000, 'end', 'top')
-    })
+      error: (err) => {
+        const msg = this.getErrorMessage(err, 'No se pudieron cargar las marcas');
+        this.snackBarService.showSnackBar(`Error al cargar las marcas: ${msg}`, 'error-snackbar', 3000, 'end', 'top');
+      }
+    });
   }
 
-  onSubmit(){
-    if (this.productForm.valid && !this.isSubmitting()) {
-      this.isSubmitting.set(true);
-      const product: Product = {
-        ID: 0,
-        name: this.name.value,
-        code: this.code.value,
-        sku: this.sku.value || '',
-        profit_margin: Number(this.profitMargin.value),
-        description: this.description.value || '',
-        category_id: this.category.value,
-        brand_id: this.brand.value,
-      };
-      if (this.id > 0) {
-        this.productService.update(this.id, product).subscribe({
-          next: (res) => {
-            this.snackBarService.showSnackBar(`Se actualizó con éxito el producto ${res.name.toLowerCase()}`, 'success-snackbar', 3000, 'end', 'top');
-          },
-          error: (err) => {
-            this.isSubmitting.set(false);
-            this.snackBarService.showSnackBar(`Error al actualizar el producto: ${err}`, 'error-snackbar', 3000, 'end', 'top');
-          },
-          complete: () => {
-            this.isSubmitting.set(false);
-            this.productForm.reset();
-            this.goBack();
-          }
-        });
-      }else{
-        this.productService.save(product).subscribe({
-          next: () => {
-            this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top');
-          },
-          error: (err) => {
-            this.isSubmitting.set(false);
-            this.snackBarService.showSnackBar(`Error al crear el producto: ${err}`, 'error-snackbar', 3000, 'end', 'top');
-          },
-          complete: () => {
-            this.isSubmitting.set(false);
-            this.productForm.reset();
-            this.goBack();
-          }
-        });
-      }
+  onSubmit() {
+    if (this.productForm.invalid || this.isSubmitting()) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
+
+    const categoryId = Number(this.category.value);
+    const brandId = Number(this.brand.value);
+    if (!categoryId || categoryId <= 0) {
+      this.snackBarService.showSnackBar('Debe seleccionar una categoría válida', 'error-snackbar', 3000, 'end', 'top');
+      return;
+    }
+    if (!brandId || brandId <= 0) {
+      this.snackBarService.showSnackBar('Debe seleccionar una marca válida', 'error-snackbar', 3000, 'end', 'top');
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    const product: Product = {
+      ID: 0,
+      name: this.name.value,
+      code: this.code.value,
+      sku: this.sku.value || '',
+      profit_margin: Number(this.profitMargin.value),
+      description: this.description.value || '',
+      category_id: categoryId,
+      brand_id: brandId,
+    };
+
+    if (this.id > 0) {
+      this.productService.update(this.id, product).subscribe({
+        next: (res) => {
+          this.isSubmitting.set(false);
+          this.snackBarService.showSnackBar(`Se actualizó con éxito el producto ${res.name.toLowerCase()}`, 'success-snackbar', 3000, 'end', 'top');
+          this.productForm.reset();
+          this.goBack();
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          const msg = this.getErrorMessage(err, 'No se pudo actualizar el producto');
+          this.snackBarService.showSnackBar(`Error al actualizar el producto: ${msg}`, 'error-snackbar', 3500, 'end', 'top');
+        }
+      });
+    } else {
+      this.productService.save(product).subscribe({
+        next: () => {
+          this.isSubmitting.set(false);
+          this.snackBarService.showSnackBar('Producto creado con éxito', 'success-snackbar', 3000, 'end', 'top');
+          this.productForm.reset();
+          this.goBack();
+        },
+        error: (err) => {
+          this.isSubmitting.set(false);
+          const msg = this.getErrorMessage(err, 'No se pudo crear el producto');
+          this.snackBarService.showSnackBar(`Error al crear el producto: ${msg}`, 'error-snackbar', 3500, 'end', 'top');
+        }
+      });
     }
   }
 
-
-  addCategory(){
+  addCategory() {
     const dialogRef = this.dialog.open(DialogFormComponent, {
       width: '400px',
       data: {
@@ -205,19 +232,19 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        const category: Category = {ID:0, name: result.name}
+      if (result && result.name && result.name.trim()) {
+        const category: Category = { ID: 0, name: result.name.trim() };
         this.categoryService.save(category).subscribe({
           next: (res) => {
-            this.categories = [...this.categories, res]
-            this.productForm.patchValue({category: res.ID})
-            this.snackBarService.showSnackBar('Categoría creada con éxito', 'success-snackbar', 3000, 'end', 'top')
+            this.categories = [...this.categories, res];
+            this.productForm.patchValue({ category: res.ID });
+            this.snackBarService.showSnackBar('Categoría creada con éxito', 'success-snackbar', 3000, 'end', 'top');
           },
-          error: (err) => this.snackBarService.showSnackBar(`Error al crear la categoría: ${err}`, 'error-snackbar', 3000, 'end', 'top')
+          error: (err) => {
+            const msg = this.getErrorMessage(err, 'No se pudo crear la categoría');
+            this.snackBarService.showSnackBar(`Error al crear la categoría: ${msg}`, 'error-snackbar', 3000, 'end', 'top');
+          }
         });
-        if (this.category.value === '0') {
-          this.productForm.patchValue({ category: null })
-        }
       }
     });
   }
@@ -234,19 +261,19 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const brand: Brand = {ID:0, name: result.name}
+      if (result && result.name && result.name.trim()) {
+        const brand: Brand = { ID: 0, name: result.name.trim() };
         this.brandService.save(brand).subscribe({
           next: (res) => {
-            this.brands = [...this.brands, res]
-            this.productForm.patchValue({brand: res.ID})
-            this.snackBarService.showSnackBar('Marca creada con éxito', 'success-snackbar', 3000, 'end', 'top')
+            this.brands = [...this.brands, res];
+            this.productForm.patchValue({ brand: res.ID });
+            this.snackBarService.showSnackBar('Marca creada con éxito', 'success-snackbar', 3000, 'end', 'top');
           },
-          error: (err) => this.snackBarService.showSnackBar(`Error al crear la marca: ${err}`, 'error-snackbar', 3000, 'end', 'top')
+          error: (err) => {
+            const msg = this.getErrorMessage(err, 'No se pudo crear la marca');
+            this.snackBarService.showSnackBar(`Error al crear la marca: ${msg}`, 'error-snackbar', 3000, 'end', 'top');
+          }
         });
-        if (this.brand.value === '0') {
-          this.productForm.patchValue({ brand: null })
-        }
       }
     });
   }
@@ -258,13 +285,17 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
     }
   }
 
-  onImportExcel(){
+  onImportExcel() {
     this.productService.importExcel(this.selectedFile).subscribe({
-      next: (res: any) => this.message = res.message
-    })
+      next: (res: any) => this.message = res.message,
+      error: (err) => {
+        const msg = this.getErrorMessage(err, 'Error al importar excel');
+        this.snackBarService.showSnackBar(msg, 'error-snackbar', 3500, 'end', 'top');
+      }
+    });
   }
 
-  exportExcel(){
+  exportExcel() {
     this.productService.exportExcel().subscribe({
       next: (blob) => {
         const a = document.createElement('a');
@@ -274,8 +305,11 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
         a.click();
         URL.revokeObjectURL(objectUrl);
       },
-
-    })
+      error: (err) => {
+        const msg = this.getErrorMessage(err, 'Error al exportar modelo');
+        this.snackBarService.showSnackBar(msg, 'error-snackbar', 3500, 'end', 'top');
+      }
+    });
   }
 
   get breadcrumbs(): BreadcrumbItem[] {
@@ -311,7 +345,4 @@ export class ProductComponent implements OnInit, ComponentCanDeactivate {
   goBack() {
     this.router.navigate(['/products']);
   }
-
 }
-
-

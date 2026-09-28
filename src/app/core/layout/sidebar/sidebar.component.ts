@@ -87,12 +87,6 @@ export class SidebarComponent implements OnInit {
         },
       ]
     },
-    {
-      name: 'Usuarios',
-      icon: 'person_search',
-      route: '/users',
-      allowedRoles: ['ROOT']
-    },
   ]
 
   ngOnInit(): void {

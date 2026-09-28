@@ -10,6 +10,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppNotification, NotificationService } from '@core/services/notification.service';
+import { SearchService } from '@core/services/search.service';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -34,10 +36,16 @@ export class HeaderComponent {
   @Output() toggleSidebar = new EventEmitter<boolean>();
 
   readonly notificationService = inject(NotificationService);
+  readonly searchService = inject(SearchService);
+  readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  toggle() {
+  toggle(): void {
     this.toggleSidebar.emit(!this.isOpen);
+  }
+
+  onNotificationMenuOpened(): void {
+    this.notificationService.fetchNotifications();
   }
 
   onNotificationClick(notif: AppNotification): void {
@@ -57,8 +65,15 @@ export class HeaderComponent {
     this.notificationService.clearAll();
   }
 
-  deleteNotification(event: MouseEvent, id: string): void {
+  deleteNotification(event: MouseEvent, id: number | string): void {
     event.stopPropagation();
     this.notificationService.deleteNotification(id);
+  }
+
+  onAvatarError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/img/profile.png';
+    }
   }
 }

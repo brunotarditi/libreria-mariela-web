@@ -55,14 +55,14 @@ export class SuppliersComponent implements OnInit {
 
   onBulkDelete(items: Supplier[]): void {
     this.isLoading.set(true);
-    const deleteObservables = items.map(item => this.supplierService.deleteById(item.ID));
-    forkJoin(deleteObservables).subscribe({
-      next: () => {
-        this.snackBarService.showSnackBar(`Se eliminaron ${items.length} proveedores con éxito`, 'success-snackbar', 3000, 'end', 'top');
+    const ids = items.map(item => item.ID);
+    this.supplierService.bulkDelete(ids).subscribe({
+      next: (res) => {
+        this.snackBarService.showSnackBar(res.message || `Se eliminaron ${res.deleted_count} proveedores con éxito`, 'success-snackbar', 3000, 'end', 'top');
         this.getData();
       },
       error: (err) => {
-        this.snackBarService.showSnackBar(`Error al eliminar proveedores: ${err}`, 'error-snackbar', 3000, 'end', 'top');
+        this.snackBarService.showSnackBar(`Error al eliminar proveedores: ${err?.error?.message || err?.message || 'Error del servidor'}`, 'error-snackbar', 3000, 'end', 'top');
         this.getData();
       }
     });

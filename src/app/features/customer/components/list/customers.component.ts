@@ -53,18 +53,18 @@ export class CustomersComponent implements OnInit {
      });
    }
 
-   onBulkDelete(items: Customer[]): void {
-     this.isLoading.set(true);
-     const deleteObservables = items.map(item => this.customerService.deleteById(item.ID));
-     forkJoin(deleteObservables).subscribe({
-       next: () => {
-         this.snackBarService.showSnackBar(`Se eliminaron ${items.length} clientes con éxito`, 'success-snackbar', 3000, 'end', 'top');
-         this.getData();
-       },
-       error: (err) => {
-         this.snackBarService.showSnackBar(`Error al eliminar clientes: ${err}`, 'error-snackbar', 3000, 'end', 'top');
-         this.getData();
-       }
-     });
-   }
+  onBulkDelete(items: Customer[]): void {
+    this.isLoading.set(true);
+    const ids = items.map(item => item.ID);
+    this.customerService.bulkDelete(ids).subscribe({
+      next: (res) => {
+        this.snackBarService.showSnackBar(res.message || `Se eliminaron ${res.deleted_count} clientes con éxito`, 'success-snackbar', 3000, 'end', 'top');
+        this.getData();
+      },
+      error: (err) => {
+        this.snackBarService.showSnackBar(`Error al eliminar clientes: ${err?.error?.message || err?.message || 'Error del servidor'}`, 'error-snackbar', 3000, 'end', 'top');
+        this.getData();
+      }
+    });
+  }
  }

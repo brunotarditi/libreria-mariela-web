@@ -11,6 +11,7 @@
   [columns]="columns"
   [data]="brands()"
   [isLoading]="isLoading()"
+  [exportEntity]="'brands'"
   (deleteConfirmed)="onDelete($event)"
   (bulkDeleteConfirmed)="onBulkDelete($event)">
 </app-crud-table>

@@ -1,4 +1,3 @@
-
 <app-breadcrumb [breadcrumbs]="breadcrumbs"></app-breadcrumb>
 
 <div class="header">
@@ -76,8 +75,8 @@
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
-          <mat-label>Margen de ganancia</mat-label>
-          <input type="text" matInput formControlName="profitMargin" placeholder="Ej. 20">
+          <mat-label>Margen de ganancia (%)</mat-label>
+          <input type="number" matInput formControlName="profitMargin" placeholder="Ej. 20">
             @if(profitMargin.hasError('required') && profitMargin.touched) {
               <mat-error>
                 El margen de ganancia es <strong>requerido</strong>
@@ -92,31 +91,53 @@
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
+          <mat-label>
+            <mat-icon>category</mat-icon> Seleccione una categoría
+          </mat-label>
           <mat-select required formControlName="category">
-            <mat-option value="0">
-              <button class="add-option" (click)="addCategory()">Agregar una categoría</button>
+            <mat-option [disabled]="true" class="add-option-mat">
+              <button type="button" class="add-option" (click)="$event.stopPropagation(); addCategory()">
+                <mat-icon class="add-icon">add_circle</mat-icon>
+                <span>+ Crear nueva categoría</span>
+              </button>
             </mat-option>
-            @for(category of categories; track $index){
-              <mat-option [value]="category.ID">{{category.name}}</mat-option>
+            @for(cat of categories; track cat.ID){
+              <mat-option [value]="cat.ID">{{cat.name}}</mat-option>
             }
           </mat-select>
-          <mat-label>
-            <mat-icon>category</mat-icon> Seleccione una categoria
-          </mat-label>
+          <button mat-icon-button matSuffix type="button" (click)="$event.stopPropagation(); addCategory()" matTooltip="Crear nueva categoría" class="btn-suffix-add">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+          @if(category.hasError('required') && category.touched) {
+            <mat-error>
+              La categoría es <strong>requerida</strong>
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w100" appearance="outline">
-          <mat-select required formControlName="brand">
-            <mat-option value="0">
-              <button class="add-option" (click)="addBrand()">Agregar una marca</button>
-            </mat-option>
-            @for(brand of brands; track $index){
-              <mat-option [value]="brand.ID">{{brand.name}}</mat-option>
-            }
-          </mat-select>
           <mat-label>
             <mat-icon>local_offer</mat-icon> Seleccione una marca
           </mat-label>
+          <mat-select required formControlName="brand">
+            <mat-option [disabled]="true" class="add-option-mat">
+              <button type="button" class="add-option" (click)="$event.stopPropagation(); addBrand()">
+                <mat-icon class="add-icon">add_circle</mat-icon>
+                <span>+ Crear nueva marca</span>
+              </button>
+            </mat-option>
+            @for(b of brands; track b.ID){
+              <mat-option [value]="b.ID">{{b.name}}</mat-option>
+            }
+          </mat-select>
+          <button mat-icon-button matSuffix type="button" (click)="$event.stopPropagation(); addBrand()" matTooltip="Crear nueva marca" class="btn-suffix-add">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+          @if(brand.hasError('required') && brand.touched) {
+            <mat-error>
+              La marca es <strong>requerida</strong>
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w100 full-width" appearance="outline">
@@ -146,5 +167,3 @@
     </mat-card-content>
   </mat-card>
 </div>
-
-
